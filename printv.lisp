@@ -15,6 +15,7 @@
     #:enable-printv-reader
     #:*figlet-font*
     #:*printv-output*
+    #:*default-printv-output*
     #:enable-printv-output
     #:disable-printv-output
     #:with-printv-output-enabled
@@ -26,13 +27,40 @@
 
 (in-package :printv)
 
-(defvar *printv-output*     *trace-output*)
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Configurables - Adjust to Individual Taste
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(defvar *default-printv-output*     *trace-output*)
+(defvar *printv-output*             *default-printv-output*)
 
 (defparameter *figlet-font*       "standard")
 (defparameter *major-separator*   :ff)
 (defparameter *minor-separator*   :hr)
 (defparameter *printv-macro-char* #\^)
 (defparameter *ppmx-macro-char*   #\$)
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Output Enablement and Control
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(defun enable-printv-output (&optional (stream *default-printv-output*))
+  (setf *printv-output* stream))
+
+(defun disable-printv-output ()
+  (setf *printv-output* (make-broadcast-stream)))
+
+(defmacro with-printv-output-enabled ((&optional (stream *default-printv-output*))
+                                       &body body)
+  `(let ((,*printv-output* ,stream))
+     ,@body))
+
+(defmacro with-printv-output-disabled ((&optional (stream (make-broadcast-stream)))
+                                        &body body)
+  `(let ((,*printv-output* ,stream))
+     ,@body))
+
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; PPMX - Macroexpansion Pretty-Printer (from CCL)
@@ -64,22 +92,6 @@
 ;; Copyright (C) 2006-2010, Dan Corkill <corkill@GBBopen.org>
 ;; Licensed under Apache License 2.0 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-(defun enable-printv-output (&optional (stream *trace-output*))
-  (setf *printv-output* stream))
-
-(defun disable-printv-output ()
-  (setf *printv-output* (make-broadcast-stream)))
-
-(defmacro with-printv-output-enabled ((&optional (stream *trace-output*))
-                                       &body body)
-  `(let ((,*printv-output* ,stream))
-     ,@body))
-
-(defmacro with-printv-output-disabled ((&optional (stream (make-broadcast-stream)))
-                                        &body body)
-  `(let ((,*printv-output* ,stream))
-     ,@body))
 
 (defun minor-separator ()
   (format *printv-output* "~&;;; ~72,,,'-<-~> ;;;~%")
