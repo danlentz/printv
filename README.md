@@ -24,12 +24,12 @@ macro.  __PRINTV always respects multiple values__.
 
 As I have wound up copying this utility from project to project,
 incorporating various extensions and tweaks along the way, it occurred
-to me that it was probably time to spin off my "extended" printv into
+to me that it was probably time to spin off my "extended" PRINTV into
 a standalone library.  Also included is the Clozure Associates' *PPMX*
 macro-expansion macro which is very useful in its own right, and has
 proven invaluable during development and debugging of PRINTV.
 
-The extended features implemented (apart from having printv available
+The extended features implemented (apart from having PRINTV available
 independently of the massive GBBopen project) include:
 
 * Tracing lexical variable assignments in LET and LET* forms
@@ -39,7 +39,7 @@ independently of the massive GBBopen project) include:
   ...) s-expression structure that becomes increasingly problematic
   to understand and more-so to (eventually) remove
 * Support for enabling and disabling PRINTV output to user-selected stream
-  (initially \*TRACE-OUTPUT\*) with effect of either global or dynamic extent
+  (initially \*TRACE-OUTPUT\*) effective for either global or dynamic extent
 * Support for additional typographic functionality that can generate
   easy-to-read output that is both attractive and utilitarian for structuring
   trace output in a manner that is easy to discern by eye and navigate when
@@ -47,9 +47,9 @@ independently of the massive GBBopen project) include:
   following: 
    * Major Separator (thick horizontal rule)
    * Minor Separator (thin horizontal rule)
-   * Banner Text     (*FIGLET* generated)  
+   * Banner Text     (FIGLET generated)  
 * Macro bindings on keywords (:PRINTV :PPMX) for ease of access globally
-* Inclusion of *PPMX* macro-expander distributed by Clozure Associates with
+* Inclusion of PPMX macro-expander distributed by Clozure Associates with
   their excellent Common-Lisp implementation: *Clozure Common Lisp*.
 
 ### Usage
