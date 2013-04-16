@@ -52,6 +52,7 @@ independently of the massive GBBopen project) include:
    * Minor Separator (thin horizontal rule)
    * Banner Text     (*FIGLET* generated)
 
+   
 * Macro bindings on keywords (:PRINTV :PPMX) for ease of access globally
 
 * Inclusion of *PPMX* macro-expander distributed by Clozure Associates with
