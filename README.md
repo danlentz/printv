@@ -37,9 +37,9 @@ independently of the massive GBBopen project) include:
 * Tracing conditional evaluations inside COND forms
 
 * Character-macros to support DWIM 'PRINTV the following form' reader
-  instead of unsightly, cumbersome, and error-prone nesting of
-  (PRINTV ...) sexp structure that become increasingly problematic to
-  understand and more-so to (eventually) remove
+  instead of unsightly, cumbersome, and error-prone nesting of (PRINTV
+  ...) s-expression structure that becomes increasingly problematic
+  to understand and more-so to (eventually) remove
 
 * Support for enabling and disabling PRINTV output to user-selected stream
   (initially \*TRACE-OUTPUT\*) with effect of either global or dynamic extent
@@ -48,7 +48,6 @@ independently of the massive GBBopen project) include:
   easy-to-read output that is both attractive and utilitarian for structuring
   trace output in a manner that is easy to discern by eye and navigate when
   seeking a particular segment of output.   Included are the following:
-
    * Major Separator (thick horizontal rule)
    * Minor Separator (thin horizontal rule)
    * Banner Text     (*FIGLET* generated)
