@@ -117,15 +117,15 @@ and returns multiple-values:
 > directed under the following circumstances: initially on program
 > load, subsequent to any evaluation of `(enable-printv-output)`
 > with stream argument unspecified, within the dynamic extent of
-> `(with-printv-output-enabled () ...)` macro-call (i.e., the stream
-> argument (second form) evaluates as NIL.)
+> `(with-printv-output-enabled () ...)` macro-call (i.e., *stream*
+> argument (second form) evaluates as NIL).
 
 
 * `*printv-output*` [`*default-printv-output*`]
 > The stream to which PRINTV/PPMX is currently directed.  May be
 > affected using functions `enable-printv-output` and
 > `disable-printv-output` or within the dynamic extent of macro
-> calls `with-printv-output-enabled` and `with-printv-output-enabled.`
+> calls `with-printv-output-enabled` and `with-printv-output-disabled.`
 
 
 * `*major-separator*` [`:ff`]
