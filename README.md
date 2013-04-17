@@ -161,6 +161,49 @@ and returns multiple-values:
 
 #### Basic Form Evaluation and Tracing 
 
+The fundamental purpose of PRINTV is to log a trace of the forms with
+its scope and the result of their evaluation to a specified output
+stream.  This allows the user to closely monitor the execution of
+program code in order to better understand its operation and to
+quickly identify problems that may occur due to undexpected results.
+
+A simple example that illustrates this basic functionality is given
+below:
+
+    CL-USER> (:printv
+               (defvar *y*) 
+               (defparameter *x* 2)
+               (setf *y* (sqrt *x*))
+               (setf *y* (/ 1 *y*))
+               *x*
+               *y*)
+
+prints:
+
+    ;;;   (DEFVAR *Y*) => *Y*
+    ;;;   (DEFPARAMETER *X* 2.0) => *X*
+    ;;;   (SETF *Y* (SQRT *X*)) => 1.4142135
+    ;;;   (SETF *Y* (/ 1 *Y*)) => 0.70710677
+    ;;;   *X* => 2.0
+    ;;;   *Y* => 0.70710677
+
+and correctly returns the value of the final form:
+
+    0.70710677
+
+The semantics (apart from tracing the evaluation of enclosed forms)
+are exactly as in PROGN -- the idea being that PRINTV may be used
+liberally just about anywhere, without changing the meaning or
+operation of the forms enclosed.  Notice that bound symbols are also
+'forms'.  Inclusion of `*x*` within the PROGN (in any but the last
+position) has no effect on the overall semantics of this section of
+code, but a record of the symbol-name and its value is incorporated
+into the text sent to PRINTV's output stream.  This is the essence of
+logging with PRINTV.
+
+
+
+    
 #### Tracing LET and LET* lexical assignments
 
 #### Tracing Evaluation of COND clauses
