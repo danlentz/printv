@@ -363,7 +363,68 @@ By helping to quickly identify and locate the faulty
 semantics caused by improper order of the COND clauses, PRINTV has
 possibly saved you enough time for a coffee-break!
     
-#### Extended Typographic Bells and Whistles
+#### Extended Typography, Bells, and Whistles
+
+As you begin to spend time crafting and annotating your debug-logging
+output, you may start to think of what you include within PRINTV as a
+primitive text markup DSL. And so you may begin to wish for a little
+more typographic panache.  This, at least, occurs for me now and
+again. It is very important, though, that in our pursuit of ever more
+beautiful output we do not introduce artifacts that could change the
+meaning or operation of code enclosed in a PRINTV form.  This limits
+our options when choosing the manner in which we can implement such
+features.
+
+You may have noticed from the first example shiown in section USAGE
+that the keywords `:hr` and `:ff` were used to insert into the log
+a thin and thick horizontal rule, respectively.  For these kinds of
+simple, self-contained tags, it is reasonable that we can choose a few
+keywords such as these and handle them specially when encountered
+within the implicit progn of a PRINTV. In doing so, we can simply
+specify that they will not be evaluated, effectively returning
+`(values)`. Inclusion of these tags will have no effect, even if
+they are used in the final (value-returning) position of the
+progn. Further, the special keywords that control these typographic
+features are user-configurable (see CONFIGURABLES, below).
+
+The following are a few examples which illustrate a few PRINTV's which
+use the thin and thick rule features, which we hearafter refer to as
+"major-separator" and "minor-separator" for consistency with the
+implementation code:
+
+    (printv :hr "Section 1." :hr)
+
+Prints:
+
+    ;;; ------------------------------------------------------------------------ ;;;
+    ;;; Section 1.
+    ;;; ------------------------------------------------------------------------ ;;;
+    
+Returns:
+
+    "Section 1."
+
+Similarly:
+
+    (printv :ff :hr (* 2 (+ 3 (/ 4 -1))) :hr :ff)
+
+Prints:
+
+    ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+    ;;; ======================================================================== ;;;
+    ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+    ;;; ------------------------------------------------------------------------ ;;;
+    ;;;   (* 2 (+ 3 (/ 4 -1))) => -2
+    ;;; ------------------------------------------------------------------------ ;;;
+    ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+    ;;; ======================================================================== ;;;
+    ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+Returns:
+
+    -2
+
+    
 
 #### Macro debugging with PPMX
 
