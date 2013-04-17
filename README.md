@@ -1,7 +1,7 @@
 printv
 ======
 
->   A batteries-included debug-logging macro based on __"The Handy PRINTV Macro"__
+>   A batteries-included debug-logging macro based on __"The Handy PRINTV"__
 > by *Dan Corkill, Copyright (c) 2006-2010*, and open-source licensed under the terms of
 > Apache License version 2.0
 
@@ -56,7 +56,7 @@ independently of the massive GBBopen project) include:
 
 ### Usage
 
-A quick example that shows a few features in action:
+To start, here's a quick example that shows a few features in action:
 
     CL-USER> (:printv 
                :ff :|banner| :hr 
@@ -102,6 +102,33 @@ and returns multiple-values:
     2
 
 #### Configurables
+
+* `*default-printv-output*` [`*trace-output*`]
+>
+
+* `*printv-output*` [`*default-printv-output*`]
+>
+
+* `*major-separator*` [`:ff`]
+> A special keyword defined to create a *thick* horizontal rule in
+> printed output, evaluating to NIL
+
+
+* `*minor-separator*` [`:hr`]
+> A special keyword defined to create a *thin* horizontal rule in
+> printed output, evaluating to NIL
+
+* `*printv-macro-char*` [`#\^`]
+>
+
+* `*ppmx-macro-char*` [`#\^`]
+>
+
+* `*figlet-executable*` [`"figlet"`]
+>
+
+* `*figlet-font*` [`"standard"`]
+>
 
 #### Basic Form Evaluation and Tracing 
 
