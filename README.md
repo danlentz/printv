@@ -56,23 +56,7 @@ independently of the massive GBBopen project) include:
 
 ### Usage
 
-#### Configurables
-
-#### Basic Form Evaluation and Tracing 
-
-#### Tracing LET and LET* lexical assignments
-
-#### Tracing Evaluation of COND clauses
-
-#### Extended Typographic Bells and Whistles
-
-#### Macro debugging with PPMX
-
-#### Enablement and Control of Output
-
-#### Putting it All Together
-
-A quick example showing a few features in action:
+A quick example that shows a few features in action:
 
     CL-USER> (:printv 
                :ff :|banner| :hr 
@@ -116,6 +100,20 @@ and returns multiple-values:
     0
     1
     2
+
+#### Configurables
+
+#### Basic Form Evaluation and Tracing 
+
+#### Tracing LET and LET* lexical assignments
+
+#### Tracing Evaluation of COND clauses
+
+#### Extended Typographic Bells and Whistles
+
+#### Macro debugging with PPMX
+
+#### Enablement and Control of Output
 
 ### Extension
 
