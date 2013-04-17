@@ -14,8 +14,8 @@ logging utilities that range from very simple tools to fairly complex
 application-grade suites.  In spite of this, one utility which I
 almost always wind up turning to is the *"Handy PRINTV Macro"* that is
 distributed as part of the GBBopen suite.  It is an effective
-subistitute for tracing evaluation with ad-hoc PRINT forms that
-doesn't require one to compose legions of cumbersome LOG, PRINT or
+subistitute for tracing evaluation with ad-hoc printing forms that
+doesn't require one to compose legions of cumbersome logging, PRINT or
 FORMAT calls that explicitly enumerate each value one wishes to
 incorporate into the trace.  It also provides a standardized format
 for your debug-logging output that is both consistent and easy to
@@ -113,10 +113,20 @@ and returns multiple-values:
 #### Configurables
 
 * `*default-printv-output*` [`*trace-output*`]
->
+> Controls the default stream to which PRINTV/PPMX output will be
+> directed under the following circumstances: initially on program
+> load, subsequent to any evaluation of `(enable-printv-output)`
+> with stream argument unspecified, within the dynamic extent of
+> `(with-printv-output-enabled () ...)` macro-call (i.e., the stream
+> argument (second form) evaluates as NIL.)
+
 
 * `*printv-output*` [`*default-printv-output*`]
->
+> The stream to which PRINTV/PPMX is currently directed.  May be
+> affected using functions `enable-printv-output` and
+> `disable-printv-output` or within the dynamic extent of macro
+> calls `with-printv-output-enabled` and `with-printv-output-enabled.`
+
 
 * `*major-separator*` [`:ff`]
 > A special keyword defined to create a *thick* horizontal rule in
