@@ -21,8 +21,8 @@ incorporate into the trace.  It also provides a standardized format
 for your debug-logging output that is both consistent and easy to
 interpret via quick "eyeball" inspection. Debug-logging a trace of the
 evaluation of program forms may be easily incorporated into existing
-code by simply enclosing the form or forms (implicit progn) within a
-PRINTV macro.  __PRINTV always respects multiple-values__.
+code by simply enclosing the form or forms within a PRINTV macro-call
+(implicit progn).  __PRINTV always respects multiple-values__.
 
 As I have wound up copying this utility from project to project,
 incorporating various extensions and tweaks along the way, it occurred
