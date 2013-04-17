@@ -66,11 +66,15 @@ independently of the massive GBBopen project) include:
 To start, here's a quick example that shows a few features in action:
 
     CL-USER> (:printv 
-               :ff :|banner-text| :hr 
+               :ff
+               :|banner-text|
+               :hr
+               :ts
+               :hr
                ""
                "This is an example composition testing various PRINTV functionalities."
-               "Self-evaluation of strings may be used within a printv form to effect"
-               "written commentary."
+               "Self-evaluation of strings may be used within a PRINTV form to augment"
+               "the log output with annotations or other commentary."
                "" 
                :hr
                "" 
@@ -85,7 +89,7 @@ prints the following:
 
     ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
     ;;; ======================================================================== ;;;
-    ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+    ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;    
     #|
      _                                      _            _   
     | |__   __ _ _ __  _ __   ___ _ __     | |_ _____  _| |_ 
@@ -95,10 +99,12 @@ prints the following:
 
     |#
     ;;; ------------------------------------------------------------------------ ;;;
+    ;;; .............. Wednesday, April 17, 2013 06:39:03 PM EDT ............... ;;;
+    ;;; ------------------------------------------------------------------------ ;;;
     ;;; 
     ;;; This is an example composition testing various PRINTV functionalities.
-    ;;; Self-evaluation of strings may be used within a printv form to effect
-    ;;; written commentary.
+    ;;; Self-evaluation of strings may be used within a printv form to augment
+    ;;; the log output with annotations or other commentary.
     ;;; 
     ;;; ------------------------------------------------------------------------ ;;;
     ;;;
