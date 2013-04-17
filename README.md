@@ -89,7 +89,7 @@ prints the following:
     |#
     ;;; ------------------------------------------------------------------------ ;;;
     ;;; 
-    ;;; this is an example composition testing various PRINTV functionalities.
+    ;;; This is an example composition testing various PRINTV functionalities.
     ;;; Self-evaluation of strings may be used within a printv form to effect
     ;;; written commentary.
     ;;; 
@@ -120,12 +120,12 @@ and returns multiple-values:
 
 * `*major-separator*` [`:ff`]
 > A special keyword defined to create a *thick* horizontal rule in
-> printed output, evaluating to NIL
+> printed output; it is not evaluated.
 
 
 * `*minor-separator*` [`:hr`]
 > A special keyword defined to create a *thin* horizontal rule in
-> printed output, evaluating to NIL
+> printed output; it is not evaluated.
 
 * `*printv-macro-char*` [`#\^`]
 >
@@ -180,12 +180,13 @@ applicable for the given form:
 ### Desiredata
 
 1. Cleaner formatted output from LET, LET*, and COND. 
-2. Consistent ";;;" prefixing for every line of output of LET, LET*,
-   COND, and other evaluated forms.
+2. Consistent ";;;" prefixing for every line of output for LET, LET*,
+   COND, and other multi-line evaluated forms.
 3. Dynamic tracking of indent according to structure.
 4. Forms with implicit progn occurring within printv should have that
    progn recursively PRINTVed, with incorporation of formatting
    described by items 1, 2, and 3, above.
+5. Test Suite
 
 
 
