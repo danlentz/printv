@@ -18,8 +18,7 @@
     #:*default-printv-output*
     #:enable-printv-output
     #:disable-printv-output
-    #:with-printv-output-enabled
-    #:with-printv-output-disabled
+    #:with-printv-output-to
     #:*printv-macro-char*
     #:*ppmx-macro-char*
     #:*major-separator*
@@ -56,28 +55,23 @@
 (defun disable-printv-output ()
   (setf *printv-output* (make-broadcast-stream)))
 
-(defmacro with-printv-output-enabled ((&optional (stream *default-printv-output*))
-                                       &body body)
-  `(let ((,*printv-output* ,stream))
-     ,@body))
-
-(defmacro with-printv-output-disabled ((&optional (stream (make-broadcast-stream)))
-                                        &body body)
-  `(let ((,*printv-output* ,stream))
+(defmacro with-printv-output-to ((&optional (stream *default-printv-output*))
+                                  &body body)
+  `(let ((*printv-output* ,stream))
      ,@body))
 
 (defun disable-printv ()
-  (setf *printv-output* nil))
+  (enable-printv-output nil))
 
 (defun enable-printv ()
   (enable-printv-output))
 
 (defmacro with-printv-disabled (&body body)
-  `(with-printv-output-enabled (nil)
+  `(with-printv-output-to (nil)
      ,@body))
 
 (defmacro with-printv-enabled (&body body)
-  `(with-printv-output-enabled ()
+  `(with-printv-output-to (*default-printv-output*)
      ,@body))
 
 
