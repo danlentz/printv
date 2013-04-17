@@ -40,8 +40,8 @@ independently of the massive GBBopen project) include:
   instead of unsightly, cumbersome, and error-prone nesting of (PRINTV
   ...) s-expression structure that becomes increasingly problematic
   to understand and even more-so to (eventually) remove
-* Support for fully disabling printv in order to allow printv
-  instrumented code to operate at full performance that should be
+* Support for fully disabling printv with global or dynamic extent in order to 
+  allow printv instrumented code to operate at full performance that should be
   nearly identical to that of equivalent to code without such
   instrumentation.
 * Support enablement and disablement of PRINTV output to user-selected stream
