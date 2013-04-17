@@ -167,8 +167,16 @@ applicable for the given form:
       `((form-printer   ',form)
         (values-printer (setf ,result-sym (funcall ,values-trans-fn
                                            (multiple-value-list ,form))))))
-      
+                                             
+### Desiredata
 
+1. Cleaner formatted output from LET, LET*, and COND
+2. Consistent ";;;" prefixing for every line of output of LET, LET*,
+   COND, and evaluated forms
+3. Dynamic tracking of indent according to structure
+4. Forms with implicit progn occurring within printv should have that
+   progn recursively PRINTVed, with incorporation of formatting
+   described by items 2 and 3, above.
 
 
 
