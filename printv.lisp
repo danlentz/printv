@@ -23,7 +23,9 @@
     #:*printv-macro-char*
     #:*ppmx-macro-char*
     #:*major-separator*
-    #:*minor-separator*))
+    #:*minor-separator*
+    #:disable-printv
+    #:enable-printv))
 
 (in-package :printv)
 
@@ -45,6 +47,12 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Output Enablement and Control
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(defun disable-printv ()
+  (setf *printv-output* nil))
+
+(defun enable-printv ()
+  (enable-printv-output))
 
 (defun enable-printv-output (&optional (stream *default-printv-output*))
   (setf *printv-output* stream))
@@ -69,19 +77,20 @@
 
 (defmacro ppmx (form)
   "Pretty prints the macro expansion of FORM."
-  `(let* ((exp1 (macroexpand-1 ',form))
-           (exp (macroexpand exp1))
-           (*print-circle* nil))
-     (format *printv-output* "~%;; Form: ~W"  (quote ,form))
-     (cond ((equal exp exp1)
-             (format *printv-output* "~%;;~%;; Macro expansion:~%")
-             (pprint exp *printv-output*))
-       (t (format *printv-output* "~&;; First step of expansion:~%")
-         (pprint exp1 *printv-output*)
-         (format *printv-output* "~%;;~%;; Final expansion:~%")
-         (pprint exp *printv-output*)))
-     (format *printv-output* "~%;;~%;; ")
-     (values)))
+  `(when *printv-output*
+     (let* ((exp1 (macroexpand-1 ',form))
+             (exp (macroexpand exp1))
+             (*print-circle* nil))
+       (format *printv-output* "~%;; Form: ~W"  (quote ,form))
+       (cond ((equal exp exp1)
+               (format *printv-output* "~%;;~%;; Macro expansion:~%")
+               (pprint exp *printv-output*))
+         (t (format *printv-output* "~&;; First step of expansion:~%")
+           (pprint exp1 *printv-output*)
+           (format *printv-output* "~%;;~%;; Final expansion:~%")
+           (pprint exp *printv-output*)))
+       (format *printv-output* "~%;;~%;; ")
+       (values))))
 
 (setf (macro-function :ppmx) (macro-function 'ppmx))
 
@@ -159,54 +168,56 @@
                clauses))
       (format *printv-output* "~&;;;   =>")))
 
-(defun expander (forms &optional (values-trans-fn #'identity)) ;; Allow for customized printv'ers:
-  (let ((result-sym (gensym)))
-    `(let ((*print-readably* nil) ,result-sym)
-       ,@(loop for form in forms nconcing
-           (cond
-             ;; Markup form:
-             ((eq form *major-separator*) (list '(major-separator)))
-             ((eq form *minor-separator*) (list '(minor-separator)))            
-             ;; Binding form:
-             ((and (consp form) (or (eq (car form) 'let) (eq (car form) 'let*)))
-               `((form-printer (append '(,(car form) ,(cadr form)) ',(cddr form)))
-                  (values-printer
-                    (setf ,result-sym (funcall ,values-trans-fn
-                                        (multiple-value-list
-                                          ,(case (car form)
-                                             (let `(vlet ,@(rest form)))
-                                             (let* `(vlet* ,@(rest form))))))))))
-             ;; COND form:
-             ((and (consp form) (eq (car form) 'cond)) 
-               `((form-printer (append '(,(car form)) ',(rest form)))
-                  (values-printer
-                    (setf ,result-sym (funcall ,values-trans-fn
-                                        (multiple-value-list (vcond ,@(rest form))))))))
-             ;; FIGLET banner:             
-             ((and (keywordp form) (every (lambda (c) (or
-                                                   (and (alpha-char-p c) (lower-case-p c))
-                                                   (not (alpha-char-p c))))
-                                     (symbol-name form)))
-               `((form-printer 
-                   ,(with-output-to-string (s)                      
-                      (princ "#|" s)
-                      (terpri s)
-                      (ignore-errors
-                        (asdf/run-program:run-program
-                          (format nil "~A -f ~A -w ~D ~A" *figlet-executable*
-                            *figlet-font* *print-right-margin* (symbol-name form))
-                          :output s))
-                      (princ "|#" s)))))
-             ;; Evaluated form:
-             ((or (consp form) (and (symbolp form) (not (keywordp form))))
-               `((form-printer ',form)
-                  (values-printer
-                    (setf ,result-sym (funcall ,values-trans-fn
-                                        (multiple-value-list ,form))))))
-             ;; Self-evaluating form:
-             (t `((form-printer 
-                    (car (setf ,result-sym (list ,form))))))))
-       (values-list ,result-sym))))
+(defun expander (forms &optional (values-trans-fn #'identity)) 
+  (if (not *printv-output*)
+    (append '(progn) forms)
+    (let ((result-sym (gensym)))
+      `(let ((*print-readably* nil) ,result-sym)
+         ,@(loop for form in forms nconcing
+             (cond
+               ;; Markup form:
+               ((eq form *major-separator*) (list '(major-separator)))
+               ((eq form *minor-separator*) (list '(minor-separator)))            
+               ;; Binding form:
+               ((and (consp form) (or (eq (car form) 'let) (eq (car form) 'let*)))
+                 `((form-printer (append '(,(car form) ,(cadr form)) ',(cddr form)))
+                    (values-printer
+                      (setf ,result-sym (funcall ,values-trans-fn
+                                          (multiple-value-list
+                                            ,(case (car form)
+                                               (let `(vlet ,@(rest form)))
+                                               (let* `(vlet* ,@(rest form))))))))))
+               ;; COND form:
+               ((and (consp form) (eq (car form) 'cond)) 
+                 `((form-printer (append '(,(car form)) ',(rest form)))
+                    (values-printer
+                      (setf ,result-sym (funcall ,values-trans-fn
+                                          (multiple-value-list (vcond ,@(rest form))))))))
+               ;; FIGLET banner:             
+               ((and (keywordp form) (every (lambda (c) (or
+                                                     (and (alpha-char-p c) (lower-case-p c))
+                                                     (not (alpha-char-p c))))
+                                       (symbol-name form)))
+                 `((form-printer 
+                     ,(with-output-to-string (s)                      
+                        (princ "#|" s)
+                        (terpri s)
+                        (ignore-errors
+                          (asdf/run-program:run-program
+                            (format nil "~A -f ~A -w ~D ~A" *figlet-executable*
+                              *figlet-font* *print-right-margin* (symbol-name form))
+                            :output s))
+                        (princ "|#" s)))))
+               ;; Evaluated form:
+               ((or (consp form) (and (symbolp form) (not (keywordp form))))
+                 `((form-printer ',form)
+                    (values-printer
+                      (setf ,result-sym (funcall ,values-trans-fn
+                                          (multiple-value-list ,form))))))
+               ;; Self-evaluating form:
+               (t `((form-printer 
+                      (car (setf ,result-sym (list ,form))))))))
+         (values-list ,result-sym)))))
 
 (defmacro printv (&rest forms)
   (expander forms))

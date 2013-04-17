@@ -40,8 +40,12 @@ independently of the massive GBBopen project) include:
   instead of unsightly, cumbersome, and error-prone nesting of (PRINTV
   ...) s-expression structure that becomes increasingly problematic
   to understand and even more-so to (eventually) remove
-* Support for enabling and disabling PRINTV output to user-selected stream
-  (initially \*TRACE-OUTPUT\*) effective for global or dynamic extent
+* Support for fully disabling printv in order to allow printv
+  instrumented code to operate at full performance that should be
+  nearly identical to that of equivalent to code without such
+  instrumentation.
+* Support enablement and disablement of PRINTV output to user-selected stream
+  (initially \*TRACE-OUTPUT\*) effective for global or dynamic extent.
 * Support for additional typographic functionality that can generate
   output that is both attractive and utilitarian for structuring
   trace output in a manner that is easy to discern by eye and to navigate when
@@ -260,7 +264,7 @@ line within the logged output:
     ;;;   (SETF *Y* (/ 1 *Y*)) => 0.70710677
     
 One might make use of other simple self-evaluating forms, such as
-numbers and ordinary keywords (more on these later) to further
+numbers and 'ordinary' keywords (more on these later) to further
 annotate the output:
 
     (:printv :FINAL-ANSWER  "" 0.70710677)
