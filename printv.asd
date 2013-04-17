@@ -16,7 +16,8 @@
   :serial           t
   :components ((:static-file "printv.asd")
                 (:static-file "README.md")
-                (:file        "printv")
-                (:file        "format-time")))
+                (:file        "package")
+                (:file        "format-time")
+                (:file        "printv")))
 
   

@@ -387,9 +387,9 @@ they are used in the final (value-returning) position of the
 progn. Further, the special keywords that control these typographic
 features are user-configurable (see CONFIGURABLES, below).
 
-The following are a few examples which illustrate a few PRINTV's which
-use the thin and thick rule features, which we hearafter refer to as
-"major-separator" and "minor-separator" for consistency with the
+The following are a few examples which illustrate some PRINTV's that
+use the thin and thick rule features, hearafter referred to as
+"major-separators" and "minor-separators" for consistency with the
 implementation code:
 
     (printv :hr "Section 1." :hr)
