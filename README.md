@@ -230,8 +230,35 @@ symbol-name and its value at the current point of execution is
 incorporated into the text sent to PRINTV's output stream.  This is
 the essence of logging with PRINTV.
 
+Self-evaluating forms, such as literal strings, are also useful within
+the context of PRINTV.  Since they evaluate to themselves, there is
+little point in showing the result of this evaluation. Instead,
+self-evaluating forms are handled specially in order to provide
+adiitional capabilities that may be useful within PRINTV's logging
+output.  In the case of literal strings, the text of the string is
+presented directly within the logging output, providing a quick means
+of augmenting your logs with descriptive annotations or other helpful
+exposition:
 
+    (:printv
+      "This was my homework assignment over spring break"
+      ""
+      (defvar *y*) 
+      (defparameter *x* 2)
+      (setf *y* (sqrt *x*))
+      (setf *y* (/ 1 *y*)))
 
+Produces a slightly more informative output to the PRINTV
+stream. Notice that the empty string `""` was used to insert a 'blank'
+line within the output text:
+
+    ;;; This was my homework assignment over spring break
+    ;;; 
+    ;;;   (DEFVAR *Y*) => *Y*
+    ;;;   (DEFPARAMETER *X* 2) => *X*
+    ;;;   (SETF *Y* (SQRT *X*)) => 1.4142135
+    ;;;   (SETF *Y* (/ 1 *Y*)) => 0.70710677
+    
     
 #### Tracing LET and LET* lexical assignments
 
