@@ -106,7 +106,7 @@
 (defun form-printer (form)
   (typecase form
     ;; String (label):
-    (string (if (equal (subseq form 0 2) "#|")
+    (string (if (and (> (length form) 2) (equal (subseq form 0 2) "#|"))
               (format *printv-output* "~&~a~%" form)
               (format *printv-output* "~&;;; ~a~%" form)))
     ;; Evaluated form:
@@ -118,7 +118,7 @@
   (force-output *printv-output*))
 
 (defun values-printer (values-list)
-  (format *printv-output* "~:[ [returned 0 values]~;~:*~{ ~w~^;~}~]~%"  values-list)
+  (format *printv-output* "~:[ [returned 0 values]~;~:*~{ ~w~^,~}~]~%"  values-list)
   (force-output *printv-output*))
 
 (defmacro vlet* (bind-forms &body body)
@@ -158,7 +158,7 @@
                clauses))
       (format *printv-output* "~&;;;   =>")))
 
-(defun expander (forms &optional values-trans-fn) ;; Allow for customized printv'ers:
+(defun expander (forms &optional (values-trans-fn #'identity)) ;; Allow for customized printv'ers:
   (let ((result-sym (gensym)))
     `(let ((*print-readably* nil) ,result-sym)
        ,@(loop for form in forms nconcing
@@ -170,25 +170,17 @@
              ((and (consp form) (or (eq (car form) 'let) (eq (car form) 'let*)))
                `((form-printer ',form)
                   (values-printer
-                    (setf ,result-sym
-                      ,(if values-trans-fn
-                         `(funcall ,values-trans-fn
-                            (multiple-value-list
-                              ,(case (car form)
-                                 (let `(vlet ,@(rest form)))
-                                 (let* `(vlet* ,@(rest form))))))
-                         `(multiple-value-list
-                            ,(case (car form)
-                               (let `(vlet ,@(rest form)))
-                               (let* `(vlet* ,@(rest form))))))))))            
+                    (setf ,result-sym (funcall ,values-trans-fn
+                                        (multiple-value-list
+                                          ,(case (car form)
+                                             (let `(vlet ,@(rest form)))
+                                             (let* `(vlet* ,@(rest form))))))))))
              ;; COND form:
              ((and (consp form) (eq (car form) 'cond)) 
                `((form-printer ',form)
                   (values-printer
-                    (setf ,result-sym ,(if values-trans-fn
-                                         `(funcall ,values-trans-fn
-                                            (multiple-value-list (vcond ,@(rest form))))
-                                         `(multiple-value-list (vcond ,@(rest form))))))))
+                    (setf ,result-sym (funcall ,values-trans-fn
+                                        (multiple-value-list (vcond ,@(rest form))))))))
              ;; FIGLET banner:             
              ((and (keywordp form) (every (lambda (c) (or
                                                    (and (alpha-char-p c) (lower-case-p c))
@@ -208,10 +200,8 @@
              ((or (consp form) (and (symbolp form) (not (keywordp form))))
                `((form-printer ',form)
                   (values-printer
-                    (setf ,result-sym ,(if values-trans-fn
-                                         `(funcall ,values-trans-fn
-                                            (multiple-value-list ,form))
-                                         `(multiple-value-list ,form))))))             
+                    (setf ,result-sym (funcall ,values-trans-fn
+                                        (multiple-value-list ,form))))))
              ;; Self-evaluating form:
              (t `((form-printer 
                     (car (setf ,result-sym (list ,form))))))))
