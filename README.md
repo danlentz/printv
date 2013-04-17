@@ -270,6 +270,27 @@ Prints:
     ;;;   :FINAL-ANSWER
     ;;; 
     ;;;   0.70710677
+
+Finally, you may rely on PRINTV to always respect multiple-values,
+which are denoted in logging output as a series of comma-separated
+forms. Multiple-values are always correctly returned when produced by
+evaluation of any form, both within PRINTV's implicit progn and when
+produced as the result of the final form:
+
+    (:printv
+       (values 1 2 3)
+       (values 'a 'b 'c))
+
+Logs the following:           
+
+    ;;;   (VALUES 1 2 3) => 1, 2, 3
+    ;;;   (VALUES 'A 'B 'C) => A, B, C
+
+And returns as multiple-values:
+
+    A
+    B
+    C
     
 #### Tracing LET and LET* lexical assignments
 
