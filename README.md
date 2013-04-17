@@ -1,9 +1,9 @@
 printv
 ======
 
->   A batteries-included debug-logging macro based on __"The Handy PRINTV"__
-> by *Dan Corkill, Copyright (c) 2006-2010*, and open-source licensed under the terms of
-> Apache License version 2.0
+>  PRINTV is a 'batteries-included' tracing and debug-logging macro based
+> on __"The Handy PRINTV"__ by *Dan Corkill, Copyright (c) 2006-2010*,
+> and open-source licensed under the terms of Apache License version 2.
 
 
 ### Motivation
@@ -15,9 +15,9 @@ application-grade suites.  In spite of this, one utility which I
 almost always wind up turning to is the *"Handy PRINTV Macro"* that is
 distributed as part of the GBBopen suite.  It is an effective
 subistitute for tracing evaluation with ad-hoc PRINT forms that
-doesn't require one to compose legions of complete PRINT or (worse yet
-FORMAT) calls explicitly enumerating each value one wishes to
-incorporate in the trace.  It also provides a standardized format for
+doesn't require one to compose legions of cumbersome LOG, PRINT or
+FORMAT calls that explicitly enumerate each value one wishes to
+incorporate into the trace.  It also provides a standardized format for
 your debug-logging output that is both consistent and easy to
 interpret via quick "eyeball" inspection. Debug-logging may be easily
 incorporated into existing code by simply enclosing a form or forms
