@@ -141,7 +141,8 @@ and returns multiple-values:
 > Character to use as macro-character to implement reader extension
 > that will behave as if the next form that follows is enclosed within
 > a PRINTV macro-call.  Return values and program operation will be
-> unffected. 
+> unffected, and so may be used as-needed without fear of corrupting
+> live code.
 
 * `*ppmx-macro-char*` [`#\$`]
 > Character to use as macro-character to implement reader extension
