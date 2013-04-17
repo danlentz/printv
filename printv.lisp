@@ -8,25 +8,25 @@
     #:printv
     #:ppmx-reader
     #:enable-ppmx-reader
-    #:vlet*
-    #:vlet
-    #:vcond
     #:printv-reader
     #:enable-printv-reader
-    #:*figlet-font*
-    #:*printv-output*
-    #:*default-printv-output*
     #:enable-printv-output
     #:disable-printv-output
     #:with-printv-output-to
-    #:*printv-macro-char*
-    #:*ppmx-macro-char*
-    #:*major-separator*
-    #:*minor-separator*
     #:disable-printv
     #:enable-printv
     #:with-printv-disabled
-    #:with-printv-enabled))
+    #:with-printv-enabled
+    #:format-universal-time
+    #:format-decoded-time
+    #:*figlet-font*
+    #:*figlet-executable*
+    #:*printv-output*
+    #:*default-printv-output*
+    #:*printv-macro-char*
+    #:*ppmx-macro-char*
+    #:*major-separator*
+    #:*minor-separator*))
 
 (in-package :printv)
 
@@ -56,9 +56,9 @@
 (defun disable-printv-output ()
   (setf *printv-output* (make-broadcast-stream)))
 
-(defmacro with-printv-output-to ((&optional (stream *default-printv-output*))
+(defmacro with-printv-output-to ((&optional (destination *default-printv-output*))
                                   &body body)
-  `(let ((*printv-output* ,stream))
+  `(let ((*printv-output* ,destination))
      ,@body))
 
 (defun disable-printv ()
@@ -164,15 +164,16 @@
 
 (defmacro vcond (&body clauses)
   `(progn  (format *printv-output* "~&~%          ")
-     (cond ,@(mapcar #'(lambda (clause)
-                       `((let ((x ,(car clause)))
-                           (format *printv-output*
-                             " [~S -> ~S]~%          " ',(car clause) x)
-			  x)
-			,@(cdr clause)))
-               clauses))
-      (format *printv-output* "~&;;;   =>")))
-  
+     (multiple-value-prog1 (cond ,@(mapcar #'(lambda (clause)
+                                               `((let ((x ,(car clause)))
+                                                   (format *printv-output*
+                                                     " [~S -> ~S]~%          "
+                                                     ',(car clause) x)
+                                                   x)
+                                                  ,@(cdr clause)))
+                                     clauses))
+       (format *printv-output* "~&;;;   =>"))))
+
 (defun expander (forms &optional (values-trans-fn #'identity))
   (let ((result-sym (gensym)))
     `(flet ((exp-1 ()
@@ -224,6 +225,7 @@
                              (car (setf ,result-sym (list ,form))))))))
                 (values-list ,result-sym))))
        (etypecase *printv-output*
+         (null      ,(append '(progn) forms))
          (pathname  (bt:with-recursive-lock-held (*printv-lock*)
                       (with-open-file (logfile *printv-output* 
                                         :direction :output
@@ -231,7 +233,6 @@
                                         :if-exists :append)
                         (with-printv-output-to (logfile)
                           (exp-1)))))
-         (null      ,(append '(progn) forms))
          (t         (bt:with-recursive-lock-held (*printv-lock*)
                       (exp-1)))))))
 
