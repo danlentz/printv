@@ -70,6 +70,53 @@ independently of the massive GBBopen project) include:
 
 #### Enablement and Control of Output
 
+#### Putting it All Together
+
+A quick example showing a few features in action:
+
+    CL-USER> (:printv 
+               :ff :|banner| :hr 
+               ""
+               "this is an example composition testing PRINTV functionality"
+               "" 
+               :hr
+               ""
+               *print-case* 
+               (let* ((x 0) (y (+ x 1)) (z (+ y 1)))
+                 (values x y z)))
+
+prints the following:
+
+    ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+    ;;; ======================================================================== ;;;
+    ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+    #|
+     _                                 
+    | |__   __ _ _ __  _ __   ___ _ __ 
+    | '_ \ / _` | '_ \| '_ \ / _ \ '__|
+    | |_) | (_| | | | | | | |  __/ |   
+    |_.__/ \__,_|_| |_|_| |_|\___|_|   
+
+    |#
+    ;;; ------------------------------------------------------------------------ ;;;
+    ;;; 
+    ;;; this is an example composition testing PRINTV functionality
+    ;;; 
+    ;;; ------------------------------------------------------------------------ ;;;
+    ;;;
+    ;;;
+    ;;;   *PRINT-CASE* => :UPCASE
+    ;;;   (LET ((X 0) (Y 1) (Z 2))
+            (VALUES X Y Z)) =>
+               [ [X=0]  [Y=1]  [Z=2] ]
+    ;;;   => 0, 1, 2
+
+and returns multiple-values:
+
+    0
+    1
+    2
+
 ### Extension
 
 For the most part, extensions to PRINTV may be incorporated by
@@ -93,10 +140,9 @@ applicable for the given form:
 
     ((or (consp form) (and (symbolp form) (not (keywordp form))))
       `((form-printer   ',form)
-        (values-printer (setf ,result-sym ,(if values-trans-fn
-                                             `(funcall ,values-trans-fn
-                                                (multiple-value-list ,form))
-                                             `(multiple-value-list ,form))))))   
+        (values-printer (setf ,result-sym (funcall ,values-trans-fn
+                                           (multiple-value-list ,form))))))
+      
 
 
 
