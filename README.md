@@ -424,7 +424,23 @@ Returns:
 
     11/2
 
-    
+Another special markup tag (by default) is `:ts`, which causes a
+human-readable timestamp to be incorporated into the printv log output:
+
+    (printv :hr :ts :hr (machine-version) :hr)
+
+Prints:
+
+    ;;; ------------------------------------------------------------------------ ;;;
+    ;;; .............. Wednesday, April 17, 2013 06:39:03 PM EDT ............... ;;;
+    ;;; ------------------------------------------------------------------------ ;;;
+    ;;;   (MACHINE-VERSION) => "Intel(R) Xeon(R) CPU           E5462  @ 2.80GHz"
+    ;;; ------------------------------------------------------------------------ ;;;
+
+Returns:
+
+    "Intel(R) Xeon(R) CPU           E5462  @ 2.80GHz"
+
 
 #### Macro debugging with PPMX
 

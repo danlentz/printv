@@ -11,12 +11,13 @@
 (defvar *printv-output*             *default-printv-output*)
 (defvar *printv-lock*               (bt:make-recursive-lock "printv"))
 
-(defparameter *figlet-executable* "figlet")
-(defparameter *figlet-font*       "standard")
-(defparameter *major-separator*   :ff)
-(defparameter *minor-separator*   :hr)
-(defparameter *printv-macro-char* #\^)
-(defparameter *ppmx-macro-char*   #\$)
+(defparameter *figlet-executable*      "figlet")
+(defparameter *figlet-font*            "standard")
+(defparameter *major-separator*        :ff)
+(defparameter *minor-separator*        :hr)
+(defparameter *timestamp-designator*   :ts)
+(defparameter *printv-macro-char*      #\^)
+(defparameter *ppmx-macro-char*        #\$)
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -91,6 +92,19 @@
   (format *printv-output* "~&;;;~77,,,';<;~>~%")
   (force-output *printv-output*))
 
+(defun timestamp (&optional (time (get-universal-time)))
+  (funcall #'format *printv-output*
+  (let* ((ts-str (format-universal-time nil time))
+          (ts-len (length ts-str))
+          (pad0 (floor (- 80 ts-len 10) 2))
+          (pad1 (ceiling (- 80 ts-len 10) 2)))
+    (concatenate 'string
+      "~&;;; "
+      (make-string pad0  :initial-element #\.)
+      " " ts-str " "
+      (make-string pad1  :initial-element #\.)
+      " ;;;~%"))))
+
 (defun form-printer (form)
   (typecase form
     ;; String (label):
@@ -155,7 +169,8 @@
                     (cond
                       ;; Markup form:
                       ((eq form *major-separator*) (list '(major-separator)))
-                      ((eq form *minor-separator*) (list '(minor-separator)))            
+                      ((eq form *minor-separator*) (list '(minor-separator)))
+                      ((eq form *timestamp-designator*) (list '(timestamp)))
                       ;; Binding form:
                       ((and (consp form) (or (eq (car form) 'let) (eq (car form) 'let*)))
                         `((form-printer (append '(,(car form) ,(cadr form)) ',(cddr form)))

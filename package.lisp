@@ -27,4 +27,5 @@
     #:*printv-macro-char*
     #:*ppmx-macro-char*
     #:*major-separator*
-    #:*minor-separator*))
+    #:*minor-separator*
+    #:*timestamp-designator*))
