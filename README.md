@@ -15,7 +15,7 @@ application-grade suites.  In spite of this, one utility which I
 almost always wind up turning to is the *"Handy PRINTV Macro"* that is
 distributed as part of the GBBopen suite.  It is an effective
 subistitute for tracing evaluation with ad-hoc PRINT forms that
-doesn't require one to compose legions af complete PRINT or (worse yet
+doesn't require one to compose legions of complete PRINT or (worse yet
 FORMAT) calls explicitly enumerating each value one wishes to
 incorporate in the trace.  It also provides a standardized format for
 your debug-logging output that is both consistent and easy to
@@ -36,12 +36,12 @@ independently of the massive GBBopen project) include:
 
 * Tracing lexical variable assignments in LET and LET* forms
 * Tracing conditional evaluations inside COND forms
-* Character-macros to support DWIM 'PRINTV the following form' reader
+* Character-macro to support DWIM *'PRINTV the following form'* reader extension
   instead of unsightly, cumbersome, and error-prone nesting of (PRINTV
   ...) s-expression structure that becomes increasingly problematic
-  to understand and more-so to (eventually) remove
+  to understand and even more-so to (eventually) remove
 * Support for enabling and disabling PRINTV output to user-selected stream
-  (initially \*TRACE-OUTPUT\*) effective for either global or dynamic extent
+  (initially \*TRACE-OUTPUT\*) effective for global or dynamic extent
 * Support for additional typographic functionality that can generate
   output that is both attractive and utilitarian for structuring
   trace output in a manner that is easy to discern by eye and to navigate when
@@ -71,4 +71,33 @@ independently of the massive GBBopen project) include:
 #### Enablement and Control of Output
 
 ### Extension
+
+For the most part, extensions to PRINTV may be incorporated by implementing
+additional clauses within the function `EXPANDER`, using the existing
+clauses as a template to get started. Typically, evaluated forms will
+involve two subclauses: a `FORM-PRINTER` to show what is being
+evaluated, and a `VALUES-PRINTER` to show the result.
+
+For all expansions except those intended as simple typographic
+commands, it is very important that as a result of expansion the
+symbol designated by `RESULT-SYM` is set to a multiple-value-list of
+the evaluation of the original form transformed by the function
+designated by `VALUES-TRANS-FN`, and is returned as the result of
+expanding the `VALUES-PRINTER` sub-clause.
+
+For example, the `EXPANDER` clause of a simple, evaluated form appears
+as follows. Note the first line which, if it evaluates to a non-nil
+value, designates the expansion form that follows to be the one
+applicable for the given form:
+
+    ((or (consp form) (and (symbolp form) (not (keywordp form))))
+      `((form-printer ',form)
+        (values-printer
+         (setf ,result-sym ,(if values-trans-fn
+                              `(funcall ,values-trans-fn
+                                 (multiple-value-list ,form))
+                              `(multiple-value-list ,form))))))   
+
+
+
 
