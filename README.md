@@ -92,12 +92,11 @@ value, designates the expansion form that follows to be the one
 applicable for the given form:
 
     ((or (consp form) (and (symbolp form) (not (keywordp form))))
-      `((form-printer ',form)
-        (values-printer
-         (setf ,result-sym ,(if values-trans-fn
-                              `(funcall ,values-trans-fn
-                                 (multiple-value-list ,form))
-                              `(multiple-value-list ,form))))))   
+      `((form-printer   ',form)
+        (values-printer (setf ,result-sym ,(if values-trans-fn
+                                             `(funcall ,values-trans-fn
+                                                (multiple-value-list ,form))
+                                             `(multiple-value-list ,form))))))   
 
 
 
