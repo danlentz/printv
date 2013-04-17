@@ -174,6 +174,8 @@ below:
                (defvar *y*) 
                (defparameter *x* 2)
                (setf *y* (sqrt *x*))
+               *x*
+               *y*
                (setf *y* (/ 1 *y*))
                *x*
                *y*)
@@ -183,6 +185,8 @@ prints:
     ;;;   (DEFVAR *Y*) => *Y*
     ;;;   (DEFPARAMETER *X* 2.0) => *X*
     ;;;   (SETF *Y* (SQRT *X*)) => 1.4142135
+    ;;;   *X* => 2.0
+    ;;;   *Y* => 1.4142135
     ;;;   (SETF *Y* (/ 1 *Y*)) => 0.70710677
     ;;;   *X* => 2.0
     ;;;   *Y* => 0.70710677
@@ -195,11 +199,12 @@ The semantics (apart from tracing the evaluation of enclosed forms)
 are exactly as in PROGN -- the idea being that PRINTV may be used
 liberally just about anywhere, without changing the meaning or
 operation of the forms enclosed.  Notice that bound symbols are also
-'forms'.  Inclusion of `*x*` within the PROGN (in any but the last
-position) has no effect on the overall semantics of this section of
-code, but a record of the symbol-name and its value is incorporated
-into the text sent to PRINTV's output stream.  This is the essence of
-logging with PRINTV.
+'forms'.  Inclusion of `*x*` and `*y*` forms within the implicit-progn
+of a PRINTV expression (in any but the last position) has no effect on
+the overall semantics of the given of code, but a record of the
+symbol-name and its value at the current point of execution is
+incorporated into the text sent to PRINTV's output stream.  This is
+the essence of logging with PRINTV.
 
 
 
