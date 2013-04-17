@@ -34,8 +34,11 @@ proven invaluable during development and debugging of PRINTV.
 The extended features implemented (in addition to making PRINTV available
 independently of the massive GBBopen project) include:
 
+* Thread Safety
 * Tracing lexical variable assignments in LET and LET* forms
 * Tracing conditional evaluations inside COND forms
+* Support a variety of output destinations, including to files and to arbitrary
+  user-defined streams.
 * Character-macro to support DWIM *'PRINTV the following form'* reader extension
   instead of unsightly, cumbersome, and error-prone nesting of (PRINTV
   ...) s-expression structure that becomes increasingly problematic
@@ -125,7 +128,9 @@ and returns multiple-values:
 > argument (second form) as NIL).
 
 * `*printv-output*` [`*default-printv-output*`]
-> The stream to which PRINTV/PPMX is currently directed.  May be
+> The stream to which PRINTV/PPMX is currently directed. Types of
+> valid values this may hold include streams (log to stream), pathnames
+> (log to file), or null (disable printv). May be
 > affected using functions `enable-printv-output` and
 > `disable-printv-output` or within the dynamic extent of macro
 > call `with-printv-output-to`. See also the more powerful
