@@ -363,7 +363,7 @@ By helping to quickly identify and locate the faulty
 semantics caused by improper order of the COND clauses, PRINTV has
 possibly saved you enough time for a coffee-break!
     
-#### Extended Typography, Bells, and Whistles
+#### Extended Typography: Bells, and Whistles
 
 As you begin to spend time crafting and annotating your debug-logging
 output, you may start to think of what you include within PRINTV as a
@@ -406,7 +406,7 @@ Returns:
 
 Similarly:
 
-    (printv :ff :hr (* 2 (+ 3 (/ 4 -1))) :hr :ff)
+    (printv :ff :hr (* 2 (+ 3 (/ -1 4))) :hr :ff)
 
 Prints:
 
@@ -414,7 +414,7 @@ Prints:
     ;;; ======================================================================== ;;;
     ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
     ;;; ------------------------------------------------------------------------ ;;;
-    ;;;   (* 2 (+ 3 (/ 4 -1))) => -2
+    ;;;   (* 2 (+ 3 (/ -1 4))) => 11/2
     ;;; ------------------------------------------------------------------------ ;;;
     ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
     ;;; ======================================================================== ;;;
@@ -422,7 +422,7 @@ Prints:
 
 Returns:
 
-    -2
+    11/2
 
     
 
