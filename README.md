@@ -72,11 +72,12 @@ independently of the massive GBBopen project) include:
 
 ### Extension
 
-For the most part, extensions to PRINTV may be incorporated by implementing
-additional clauses within the function `EXPANDER`, using the existing
-clauses as a template to get started. Typically, evaluated forms will
-involve two subclauses: a `FORM-PRINTER` to show what is being
-evaluated, and a `VALUES-PRINTER` to show the result.
+For the most part, extensions to PRINTV may be incorporated by
+implementing additional clauses within the function `EXPANDER`, using
+the existing clauses as a template to get started. Typically,
+evaluated forms will involve construction of two function-call
+s-expressions: a `FORM-PRINTER` to show what is being evaluated, and a
+`VALUES-PRINTER` to show the result.
 
 For all expansions except those intended as simple typographic
 commands, it is very important that as a result of expansion the
