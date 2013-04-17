@@ -303,10 +303,117 @@ And returns as multiple-values:
     B
     C
     
-#### Tracing LET and LET* lexical assignments
+#### LET, LET*, and COND: Binding Forms and Conditional Clauses
 
-#### Tracing Evaluation of COND clauses
+For certain, more structurally complex forms, simply printing the
+value to which it evaluates does not necessarily provide much insight
+as to how that value may have been arrived at.  Lexical binding forms,
+LET and LET*, are such a case.  These forms often perform significant
+calculations as part of their initial binding lists that are
+subsequently referenced by the following series of form(s) within
+their implicit progn. For example, the following code should return
+a humanly readable string that denotes the time exactly 24 hours ago:
 
+    (let* ((a (get-universal-time))
+           (b (- a 86400)))
+       (format-universal-time nil b))
+
+Might return `"Tuesday, April 16, 2013 11:45:50 AM EDT"`, but          
+the significant calculation that is performed to arrive at
+this result is not apparent from just the result of this
+evaluation. To get a better understanding what is happening, one needs
+to see the values that are bound to the lexical variables `a` and
+`b`. PRINTV supports this kind of introspection by providing special
+handling of LET and LET* binding forms:
+
+    (printv
+      (let* ((a (get-universal-time))
+             (b (- a 86400)))
+         (format-universal-time nil b)))
+
+Logs the following:
+
+    ;;;   (LET* ((A (GET-UNIVERSAL-TIME)) (B (- A 86400)))
+            (FORMAT-UNIVERSAL-TIME NIL B)) =>
+               [ [A=3575203206]  [B=3575116806] ]
+    ;;;   => "Tuesday, April 16, 2013 12:00:06 PM EDT"
+
+Notice the values bound to `a` and `b` are logged with a printed
+representation denoted by square brackets.
+
+Similarly, within COND forms, evaluation of the clause heads is of
+interest not only to track what they evaluate *to*, but also to see
+*which* ones are evaluated *at all* (COND clauses provide
+short-circuiting semantics).  PRINTV provides special handling for
+these as well:
+
+    (printv
+      (cond
+        ((null     :x) (values "no"  1))
+        ((stringp  :x) (values "no"  2))
+        ((symbolp  :x) (values "no"  3))
+        ((keywordp :x) (values "yes" 4))
+        (t             (values "no"  5))))
+
+Logs the following:
+          
+    ;;;   (COND ((NULL :X) (VALUES "no" 1)) ((STRINGP :X) (VALUES "no" 2))
+                ((SYMBOLP :X) (VALUES "no" 3)) ((KEYWORDP :X) (VALUES "yes" 4))
+                (T (VALUES "no" 5))) =>
+           [(NULL :X) -> NIL]
+           [(STRINGP :X) -> NIL]
+           [(SYMBOLP :X) -> T]          
+    ;;;   => "no", 3
+
+And returns multiple-values:
+
+    "no"
+    3
+
+Notice that each cond clause evaluated, depicted by a bracketed *[clause -> result]*
+representation, is displayed below the COND form and before the final
+result in the printv output text.  By examining this output, it is
+evident that the successful clause head was `(symbolp :x)` which, of
+course, is true, but that the more specific clause head `(keywordp
+:x)` that, most likely, was the author's intent, was never
+evaluated. This is a common error, that can be fixed by reordering of
+the two clauses, but that can be sometimes be an elusive bug to find
+in actual code.  With PRINTV, it was immediately obvious what the
+problem was and how to resolve it:
+
+    (printv
+      (cond
+        ((null     :x) (values "no"  1))
+        ((stringp  :x) (values "no"  2))
+        ((keywordp :x) (values "yes" 3))        
+        ((symbolp  :x) (values "no"  4))
+        (t             (values "no"  5))))
+
+Now logs:
+          
+    ;;;   (COND ((NULL :X) (VALUES "no" 1)) ((STRINGP :X) (VALUES "no" 2))
+                ((KEYWORDP :X) (VALUES "yes" 3)) ((SYMBOLP :X) (VALUES "no" 4))
+                (T (VALUES "no" 5))) =>
+           [(NULL :X) -> NIL]
+           [(STRINGP :X) -> NIL]
+           [(KEYWORDP :X) -> T]          
+    ;;;   => "yes", 3
+
+And, as was the programmer's intent, now correctly returns multiple-values:
+
+    "yes"
+    3
+
+This type of programmer error does not cause a warning that can be
+reported by the compiler, or error to alert the user at runtime. In
+fact, the original version code is perfectly valid; it just does not
+correctly represent the programmer's intent.  This is just one of many
+situations in which the 'tracing' functionality of PRINTV is
+indespensible for quick identification and resolution of errors in
+code semantics. By helping to quickly identify and locate the faulty
+semantics caused by improper order of the COND clauses, PRINTV has
+possibly saved you enough time for a coffee-break!
+    
 #### Extended Typographic Bells and Whistles
 
 #### Macro debugging with PPMX
