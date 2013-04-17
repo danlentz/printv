@@ -59,9 +59,11 @@ independently of the massive GBBopen project) include:
 To start, here's a quick example that shows a few features in action:
 
     CL-USER> (:printv 
-               :ff :|banner| :hr 
+               :ff :|banner-text| :hr 
                ""
-               "this is an example composition testing PRINTV functionality"
+               "This is an example composition testing various PRINTV functionalities."
+               "Self-evaluation of strings may be used within a printv form to effect"
+               "written commentary."
                "" 
                :hr
                ""
@@ -78,16 +80,18 @@ prints the following:
     ;;; ======================================================================== ;;;
     ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
     #|
-     _                                 
-    | |__   __ _ _ __  _ __   ___ _ __ 
-    | '_ \ / _` | '_ \| '_ \ / _ \ '__|
-    | |_) | (_| | | | | | | |  __/ |   
-    |_.__/ \__,_|_| |_|_| |_|\___|_|   
+     _                                      _            _   
+    | |__   __ _ _ __  _ __   ___ _ __     | |_ _____  _| |_ 
+    | '_ \ / _` | '_ \| '_ \ / _ \ '__|____| __/ _ \ \/ / __|
+    | |_) | (_| | | | | | | |  __/ | |_____| ||  __/>  <| |_ 
+    |_.__/ \__,_|_| |_|_| |_|\___|_|        \__\___/_/\_\\__|
 
     |#
     ;;; ------------------------------------------------------------------------ ;;;
     ;;; 
-    ;;; this is an example composition testing PRINTV functionality
+    ;;; this is an example composition testing various PRINTV functionalities.
+    ;;; Self-evaluation of strings may be used within a printv form to effect
+    ;;; written commentary.
     ;;; 
     ;;; ------------------------------------------------------------------------ ;;;
     ;;;
