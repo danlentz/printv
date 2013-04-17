@@ -117,59 +117,6 @@ and returns multiple-values:
     1
     2
 
-#### Configurables
-
-* `*default-printv-output*` [`*trace-output*`]
-> Controls the default stream to which PRINTV/PPMX output will be
-> directed under the following circumstances: initially on program
-> load, subsequent to any evaluation of `(enable-printv)` or to `(enable-printv-output)`
-> with stream argument unspecified, or within the dynamic extent of
-> `(with-printv-output-to () ...)` macro-call (i.e., *stream*
-> argument (second form) as NIL).
-
-* `*printv-output*` [`*default-printv-output*`]
-> The stream to which PRINTV/PPMX is currently directed. Types of
-> valid values this may hold include streams (log to stream), pathnames
-> (log to file), or null (disable printv). May be
-> affected using functions `enable-printv-output` and
-> `disable-printv-output` or within the dynamic extent of macro
-> call `with-printv-output-to`. See also the more powerful
-> 'enablement' controls provided by: `enable-printv`,
-> `disable-printv`, `with-printv-enabled`, and `with-printv-disabled.`
-
-* `*major-separator*` [`:ff`]
-> A special keyword defined to create a *thick* horizontal rule in
-> printed output; it is not evaluated.
-
-* `*minor-separator*` [`:hr`]
-> A special keyword defined to create a *thin* horizontal rule in
-> printed output; it is not evaluated.
-
-* `*printv-macro-char*` [`#\^`]
-> Character to use as macro-character to implement reader extension
-> that will behave as if the next form that follows is enclosed within
-> a PRINTV macro-call.  Return values and program operation will be
-> unffected, and so may be used as-needed without fear of corrupting
-> live code.
-
-* `*ppmx-macro-char*` [`#\$`]
-> Character to use as macro-character to implement reader extension
-> that will behave as if the next form that follows is enclosed within
-> a PPMX macro-call.  Note that this expansion will NOT be evaluated, and
-> so program operation may necessarily be affected if indescriminantly
-> introduced into live code.
-
-* `*figlet-executable*` [`"figlet"`]
-> Specifies the path where the desired FIGLET executable is found on
-> this system. If provided as simple command name without
-> specification of absolute directory (the default), this command will
-> be invoked if valid executable with this name can be found in the
-> default shell search path of the user who owns the current common-lisp
-> process. 
-
-* `*figlet-font*` [`"standard"`]
-> The name of the (ASCII) 'figlet font' to be used in FIGLET output.
-
 #### Basic Form Evaluation and Tracing 
 
 The fundamental purpose of PRINTV is to log a trace of the forms with
@@ -421,6 +368,59 @@ possibly saved you enough time for a coffee-break!
 #### Macro debugging with PPMX
 
 #### Enablement and Control of Output
+
+#### Configurables
+
+* `*default-printv-output*` [`*trace-output*`]
+> Controls the default stream to which PRINTV/PPMX output will be
+> directed under the following circumstances: initially on program
+> load, subsequent to any evaluation of `(enable-printv)` or to `(enable-printv-output)`
+> with stream argument unspecified, or within the dynamic extent of
+> `(with-printv-output-to () ...)` macro-call (i.e., *stream*
+> argument (second form) as NIL).
+
+* `*printv-output*` [`*default-printv-output*`]
+> The stream to which PRINTV/PPMX is currently directed. Types of
+> valid values this may hold include streams (log to stream), pathnames
+> (log to file), or null (disable printv). May be
+> affected using functions `enable-printv-output` and
+> `disable-printv-output` or within the dynamic extent of macro
+> call `with-printv-output-to`. See also the more powerful
+> 'enablement' controls provided by: `enable-printv`,
+> `disable-printv`, `with-printv-enabled`, and `with-printv-disabled.`
+
+* `*major-separator*` [`:ff`]
+> A special keyword defined to create a *thick* horizontal rule in
+> printed output; it is not evaluated.
+
+* `*minor-separator*` [`:hr`]
+> A special keyword defined to create a *thin* horizontal rule in
+> printed output; it is not evaluated.
+
+* `*printv-macro-char*` [`#\^`]
+> Character to use as macro-character to implement reader extension
+> that will behave as if the next form that follows is enclosed within
+> a PRINTV macro-call.  Return values and program operation will be
+> unffected, and so may be used as-needed without fear of corrupting
+> live code.
+
+* `*ppmx-macro-char*` [`#\$`]
+> Character to use as macro-character to implement reader extension
+> that will behave as if the next form that follows is enclosed within
+> a PPMX macro-call.  Note that this expansion will NOT be evaluated, and
+> so program operation may necessarily be affected if indescriminantly
+> introduced into live code.
+
+* `*figlet-executable*` [`"figlet"`]
+> Specifies the path where the desired FIGLET executable is found on
+> this system. If provided as simple command name without
+> specification of absolute directory (the default), this command will
+> be invoked if valid executable with this name can be found in the
+> default shell search path of the user who owns the current common-lisp
+> process. 
+
+* `*figlet-font*` [`"standard"`]
+> The name of the (ASCII) 'figlet font' to be used in FIGLET output.
 
 ### Extension
 
