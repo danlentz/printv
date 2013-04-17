@@ -152,10 +152,14 @@ and returns multiple-values:
 > introduced into live code.
 
 * `*figlet-executable*` [`"figlet"`]
->
+> Specifies the path where the desired FIGLET executable is found on
+> this system. If provided as simple command name without
+> specification of absolute directory (the default), this command will
+> be invoked if valid executable can be found in the default search path of
+> user that owns the current common-lisp process. 
 
 * `*figlet-font*` [`"standard"`]
->
+> The name of the (ASCII) 'figlet font' to be used in FIGLET output.
 
 #### Basic Form Evaluation and Tracing 
 
