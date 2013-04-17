@@ -167,18 +167,46 @@ stream.  This allows the user to closely monitor the execution of
 program code in order to better understand its operation and to
 quickly identify problems that may occur due to undexpected results.
 
-A simple example that illustrates this basic functionality is given
-below:
+A simple example that illustrates this basic functionality is shown
+below.  Say one wishes to trace the execution of the following
+calculation:
 
-    CL-USER> (:printv
-               (defvar *y*) 
-               (defparameter *x* 2)
-               (setf *y* (sqrt *x*))
-               *x*
-               *y*
-               (setf *y* (/ 1 *y*))
-               *x*
-               *y*)
+    (defvar *y*) 
+    (defparameter *x* 2)
+    (setf *y* (sqrt *x*))
+    (setf *y* (/ 1 *y*))
+    
+Evaluation of this block of code results in the value `0.70710677.` To
+understand more clearly (or simply to track), it's operation, one
+might simply enclose the code within PRINTV. The result is the ability
+to see a trace, form by form, of its evaluation:
+
+    (:printv
+      (defvar *y*) 
+      (defparameter *x* 2)
+      (setf *y* (sqrt *x*))
+      (setf *y* (/ 1 *y*)))
+      
+This produces the following text to PRINTV's output stream, but still
+results in the same value:  `0.70710677.`
+
+    ;;;   (DEFVAR *Y*) => *Y*
+    ;;;   (DEFPARAMETER *X* 2) => *X*
+    ;;;   (SETF *Y* (SQRT *X*)) => 1.4142135
+    ;;;   (SETF *Y* (/ 1 *Y*)) => 0.70710677
+
+To take a step further, one might augment the block of code as
+follows:
+
+    (:printv
+      (defvar *y*) 
+      (defparameter *x* 2)
+      (setf *y* (sqrt *x*))
+      *x*
+      *y*
+      (setf *y* (/ 1 *y*))
+      *x*
+      *y*)
 
 prints:
 
