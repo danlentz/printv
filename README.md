@@ -248,9 +248,9 @@ exposition:
       (setf *y* (sqrt *x*))
       (setf *y* (/ 1 *y*)))
 
-Produces a slightly more informative output to the PRINTV
+This produces a slightly more informative output to the PRINTV
 stream. Notice that the empty string `""` was used to insert a 'blank'
-line within the output text:
+line within the logged output:
 
     ;;; This was my homework assignment over spring break
     ;;; 
@@ -259,6 +259,17 @@ line within the output text:
     ;;;   (SETF *Y* (SQRT *X*)) => 1.4142135
     ;;;   (SETF *Y* (/ 1 *Y*)) => 0.70710677
     
+One might make use of other simple self-evaluating forms, such as
+numbers and ordinary keywords (more on these later) to further
+annotate the output:
+
+    (:printv :FINAL-ANSWER  "" 0.70710677)
+
+Prints:
+
+    ;;;   :FINAL-ANSWER
+    ;;; 
+    ;;;   0.70710677
     
 #### Tracing LET and LET* lexical assignments
 
