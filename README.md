@@ -120,18 +120,15 @@ and returns multiple-values:
 > `(with-printv-output-enabled () ...)` macro-call (i.e., *stream*
 > argument (second form) evaluates as NIL).
 
-
 * `*printv-output*` [`*default-printv-output*`]
 > The stream to which PRINTV/PPMX is currently directed.  May be
 > affected using functions `enable-printv-output` and
 > `disable-printv-output` or within the dynamic extent of macro
 > calls `with-printv-output-enabled` and `with-printv-output-disabled.`
 
-
 * `*major-separator*` [`:ff`]
 > A special keyword defined to create a *thick* horizontal rule in
 > printed output; it is not evaluated.
-
 
 * `*minor-separator*` [`:hr`]
 > A special keyword defined to create a *thin* horizontal rule in
@@ -155,8 +152,9 @@ and returns multiple-values:
 > Specifies the path where the desired FIGLET executable is found on
 > this system. If provided as simple command name without
 > specification of absolute directory (the default), this command will
-> be invoked if valid executable can be found in the default search path of
-> user that owns the current common-lisp process. 
+> be invoked if valid executable with this name can be found in the
+> default shell search path of the user who owns the current common-lisp
+> process. 
 
 * `*figlet-font*` [`"standard"`]
 > The name of the (ASCII) 'figlet font' to be used in FIGLET output.
