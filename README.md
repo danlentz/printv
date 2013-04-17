@@ -121,7 +121,7 @@ and returns multiple-values:
 * `*printv-macro-char*` [`#\^`]
 >
 
-* `*ppmx-macro-char*` [`#\^`]
+* `*ppmx-macro-char*` [`#\$`]
 >
 
 * `*figlet-executable*` [`"figlet"`]
