@@ -204,9 +204,7 @@ follows:
       (setf *y* (sqrt *x*))
       *x*
       *y*
-      (setf *y* (/ 1 *y*))
-      *x*
-      *y*)
+      (setf *y* (/ 1 *y*)))
 
 prints:
 
@@ -216,8 +214,6 @@ prints:
     ;;;   *X* => 2.0
     ;;;   *Y* => 1.4142135
     ;;;   (SETF *Y* (/ 1 *Y*)) => 0.70710677
-    ;;;   *X* => 2.0
-    ;;;   *Y* => 0.70710677
 
 and correctly returns the value of the final form:
 
