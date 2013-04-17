@@ -55,6 +55,7 @@ independently of the massive GBBopen project) include:
   seeking a particular segment of output.   Included are: 
    * Major Separator (thick horizontal rule)
    * Minor Separator (thin horizontal rule)
+   * Human Readable Timestamp
    * Banner Text     (FIGLET generated)  
 * Macro bindings on keywords (:PRINTV, :PPMX) in addition to standard
   symbols (PRINTV:PRINTV, PRINTV:PPMX) for ease of use globally
