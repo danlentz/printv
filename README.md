@@ -66,11 +66,11 @@ To start, here's a quick example that shows a few features in action:
                "written commentary."
                "" 
                :hr
-               ""
+               "" 
+               (+ 2 3)              
                *print-case*
                *package*
                'symbol
-               (+ 2 3)
                (let* ((x 0) (y (1+ x)) (z (1+ y)))
                  (values x y z)))
 
@@ -95,11 +95,10 @@ prints the following:
     ;;; 
     ;;; ------------------------------------------------------------------------ ;;;
     ;;;
-    ;;;
+    ;;;   (+ 2 3) => 5
     ;;;   *PRINT-CASE* => :UPCASE
     ;;;   *PACKAGE* => #<PACKAGE "COMMON-LISP-USER">
     ;;;   'SYMBOL => SYMBOL
-    ;;;   (+ 2 3) => 5
     ;;;   (LET* ((X 0) (Y (1+ X)) (Z (1+ Y)))
             (VALUES X Y Z)) =>
                [ [X=0]  [Y=1]  [Z=2] ]
@@ -180,10 +179,10 @@ applicable for the given form:
                                              
 ### Desiredata
 
-1. Cleaner formatted output from LET, LET*, and COND
+1. Cleaner formatted output from LET, LET*, and COND. 
 2. Consistent ";;;" prefixing for every line of output of LET, LET*,
-   COND, and evaluated forms
-3. Dynamic tracking of indent according to structure
+   COND, and other evaluated forms.
+3. Dynamic tracking of indent according to structure.
 4. Forms with implicit progn occurring within printv should have that
    progn recursively PRINTVed, with incorporation of formatting
    described by items 1, 2, and 3, above.
