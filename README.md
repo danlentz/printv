@@ -83,12 +83,12 @@ For all expansions except those intended as simple typographic
 commands, it is very important that as a result of expansion the
 symbol designated by `RESULT-SYM` is set to a multiple-value-list of
 the evaluation of the original form transformed by the function
-designated by `VALUES-TRANS-FN`, and is returned as the result of
-expanding the `VALUES-PRINTER` sub-clause.
+designated by `VALUES-TRANS-FN`, and is supplied as the argument to
+the `VALUES-PRINTER` function call.
 
 For example, the `EXPANDER` clause of a simple, evaluated form appears
 as follows. Note the first line which, if it evaluates to a non-nil
-value, designates the expansion form that follows to be the one
+value, designates the expansion that follows to be the one
 applicable for the given form:
 
     ((or (consp form) (and (symbolp form) (not (keywordp form))))
