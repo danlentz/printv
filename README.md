@@ -318,13 +318,13 @@ a humanly readable string that denotes the time exactly 24 hours ago:
            (b (- a 86400)))
        (format-universal-time nil b))
 
-Might return `"Tuesday, April 16, 2013 11:45:50 AM EDT"`, but          
-the significant calculation that is performed to arrive at
-this result is not apparent from just the result of this
-evaluation. To get a better understanding what is happening, one needs
-to see the values that are bound to the lexical variables `a` and
-`b`. PRINTV supports this kind of introspection by providing special
-handling of LET and LET* binding forms:
+Might return `"Tuesday, April 16, 2013 11:45:50 AM EDT"`, but the
+significant calculation that is performed to arrive at this result is
+not apparent from just the result of this evaluation. To get a better
+understanding what is happening, one needs to see the values that are
+lexically bound to the symbols `a` and `b`. PRINTV supports this kind
+of introspection by providing special handling of LET and LET* binding
+forms:
 
     (printv
       (let* ((a (get-universal-time))
@@ -376,8 +376,8 @@ result in the printv output text.  By examining this output, it is
 evident that the successful clause head was `(symbolp :x)` which, of
 course, is true, but that the more specific clause head `(keywordp
 :x)` that, most likely, was the author's intent, was never
-evaluated. This is a common error, that can be fixed by reordering of
-the two clauses, but that can be sometimes be an elusive bug to find
+evaluated. This is a common error which can be fixed by reordering
+the two clauses, but one that can be sometimes be elusive 
 in actual code.  With PRINTV, it was immediately obvious what the
 problem was and how to resolve it:
 
@@ -399,18 +399,20 @@ Now logs:
            [(KEYWORDP :X) -> T]          
     ;;;   => "yes", 3
 
-And, as was the programmer's intent, now correctly returns multiple-values:
+And, as was the programmer's intent, now correctly returns:
 
     "yes"
     3
 
 This type of programmer error does not cause a warning that can be
-reported by the compiler, or error to alert the user at runtime. In
-fact, the original version code is perfectly valid; it just does not
+reported by the compiler, or flag an error to alert the user at runtime. In
+fact, the original version of the code is entirely *valid*; but it does not
 correctly represent the programmer's intent.  This is just one of many
 situations in which the 'tracing' functionality of PRINTV is
 indespensible for quick identification and resolution of errors in
-code semantics. By helping to quickly identify and locate the faulty
+code semantics.
+
+By helping to quickly identify and locate the faulty
 semantics caused by improper order of the COND clauses, PRINTV has
 possibly saved you enough time for a coffee-break!
     
