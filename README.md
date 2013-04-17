@@ -119,16 +119,18 @@ and returns multiple-values:
 * `*default-printv-output*` [`*trace-output*`]
 > Controls the default stream to which PRINTV/PPMX output will be
 > directed under the following circumstances: initially on program
-> load, subsequent to any evaluation of `(enable-printv-output)`
+> load, subsequent to any evaluation of `(enable-printv)` or to `(enable-printv-output)`
 > with stream argument unspecified, or within the dynamic extent of
-> `(with-printv-output-enabled () ...)` macro-call (i.e., *stream*
-> argument (second form) evaluates as NIL).
+> `(with-printv-output-to () ...)` macro-call (i.e., *stream*
+> argument (second form) as NIL).
 
 * `*printv-output*` [`*default-printv-output*`]
 > The stream to which PRINTV/PPMX is currently directed.  May be
 > affected using functions `enable-printv-output` and
 > `disable-printv-output` or within the dynamic extent of macro
-> calls `with-printv-output-enabled` and `with-printv-output-disabled.`
+> call `with-printv-output-to`. See also the more powerful
+> 'enablement' controls provided by: `enable-printv`,
+> `disable-printv`, `with-printv-enabled`, and `with-printv-disabled.`
 
 * `*major-separator*` [`:ff`]
 > A special keyword defined to create a *thick* horizontal rule in
