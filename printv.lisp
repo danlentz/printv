@@ -34,6 +34,7 @@
 (defvar *default-printv-output*     *trace-output*)
 (defvar *printv-output*             *default-printv-output*)
 
+(defparameter *figlet-executable* "figlet")
 (defparameter *figlet-font*       "standard")
 (defparameter *major-separator*   :ff)
 (defparameter *minor-separator*   :hr)
@@ -168,7 +169,7 @@
              ((eq form *minor-separator*) (list '(minor-separator)))            
              ;; Binding form:
              ((and (consp form) (or (eq (car form) 'let) (eq (car form) 'let*)))
-               `((form-printer ',form)
+               `((form-printer (append '(,(car form) ,(cadr form)) ',(cddr form)))
                   (values-printer
                     (setf ,result-sym (funcall ,values-trans-fn
                                         (multiple-value-list
@@ -177,7 +178,7 @@
                                              (let* `(vlet* ,@(rest form))))))))))
              ;; COND form:
              ((and (consp form) (eq (car form) 'cond)) 
-               `((form-printer ',form)
+               `((form-printer (append '(,(car form)) ',(rest form)))
                   (values-printer
                     (setf ,result-sym (funcall ,values-trans-fn
                                         (multiple-value-list (vcond ,@(rest form))))))))
@@ -192,7 +193,7 @@
                       (terpri s)
                       (ignore-errors
                         (asdf/run-program:run-program
-                          (format nil "figlet -f ~A -w ~D ~A"
+                          (format nil "~A -f ~A -w ~D ~A" *figlet-executable*
                             *figlet-font* *print-right-margin* (symbol-name form))
                           :output s))
                       (princ "|#" s)))))

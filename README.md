@@ -66,7 +66,7 @@ To start, here's a quick example that shows a few features in action:
                :hr
                ""
                *print-case* 
-               (let ((x 0) (y 1) (z 2))
+               (let* ((x 0) (y (1+ x)) (z (1+ y)))
                  (values x y z)))
 
 prints the following:
@@ -90,7 +90,7 @@ prints the following:
     ;;;
     ;;;
     ;;;   *PRINT-CASE* => :UPCASE
-    ;;;   (LET ((X 0) (Y 1) (Z 2))
+    ;;;   (LET* ((X 0) (Y (1+ X)) (Z (1+ Y)))
             (VALUES X Y Z)) =>
                [ [X=0]  [Y=1]  [Z=2] ]
     ;;;   => 0, 1, 2
