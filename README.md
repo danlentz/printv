@@ -82,7 +82,7 @@ A quick example showing a few features in action:
                :hr
                ""
                *print-case* 
-               (let* ((x 0) (y (+ x 1)) (z (+ y 1)))
+               (let ((x 0) (y 1) (z 2))
                  (values x y z)))
 
 prints the following:
