@@ -12,6 +12,7 @@
   :long-description "PRINTV is a 'batteries-included' tracing and debug-logging macro
   based on 'The Handy PRINTV' by Dan Corkill Copyright (C) 2006-2010, Dan Corkill
   <corkill@GBBopen.org>, and open-source licensed under Apache License 2.0"
+  :depends-on       (:bordeaux-threads)
   :serial t
   :components ((:static-file "printv.asd")
                 (:static-file "README.md")
