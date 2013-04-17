@@ -116,7 +116,7 @@ and returns multiple-values:
 > Controls the default stream to which PRINTV/PPMX output will be
 > directed under the following circumstances: initially on program
 > load, subsequent to any evaluation of `(enable-printv-output)`
-> with stream argument unspecified, within the dynamic extent of
+> with stream argument unspecified, or within the dynamic extent of
 > `(with-printv-output-enabled () ...)` macro-call (i.e., *stream*
 > argument (second form) evaluates as NIL).
 
@@ -138,10 +138,17 @@ and returns multiple-values:
 > printed output; it is not evaluated.
 
 * `*printv-macro-char*` [`#\^`]
->
+> Character to use as macro-character to implement reader extension
+> that will behave as if the next form that follows is enclosed within
+> a PRINTV macro-call.  Return values and program operation will be
+> unffected. 
 
 * `*ppmx-macro-char*` [`#\$`]
->
+> Character to use as macro-character to implement reader extension
+> that will behave as if the next form that follows is enclosed within
+> a PPMX macro-call.  Note that this expansion will NOT be evaluated, and
+> so program operation may necessarily be affected if indescriminantly
+> introduced into live code.
 
 * `*figlet-executable*` [`"figlet"`]
 >
