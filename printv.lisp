@@ -56,20 +56,31 @@
 
 (defmacro ppmx (form)
   "Pretty prints the macro expansion of FORM."
-  `(when *printv-output*
-     (let* ((exp1 (macroexpand-1 ',form))
-             (exp (macroexpand exp1))
-             (*print-circle* nil))
-       (format *printv-output* "~%;; Form: ~W"  (quote ,form))
-       (cond ((equal exp exp1)
-               (format *printv-output* "~%;;~%;; Macro expansion:~%")
-               (pprint exp *printv-output*))
-         (t (format *printv-output* "~&;; First step of expansion:~%")
-           (pprint exp1 *printv-output*)
-           (format *printv-output* "~%;;~%;; Final expansion:~%")
-           (pprint exp *printv-output*)))
-       (format *printv-output* "~%;;~%;; ")
-       (values))))
+  `(flet ((mx () 
+            (let* ((exp1 (macroexpand-1 ',form))
+                    (exp (macroexpand exp1))
+                    (*print-circle* nil))
+              (format *printv-output* "~%;;; Form: ~W"  (quote ,form))
+              (cond ((equal exp exp1)
+                      (format *printv-output* "~%;;;~%;;; Macro expansion:~%")
+                      (pprint exp *printv-output*))
+                (t (format *printv-output* "~&;;; First step of expansion:~%")
+                  (pprint exp1 *printv-output*)
+                  (format *printv-output* "~%;;;~%;;; Final expansion:~%")
+                  (pprint exp *printv-output*)))
+              (format *printv-output* "~%;;;~%;;; ")
+              (values))))
+     (etypecase *printv-output*
+       (null      nil) 
+       (pathname  (bt:with-recursive-lock-held (*printv-lock*)
+                    (with-open-file (logfile *printv-output* 
+                                      :direction :output
+                                      :if-does-not-exist :create
+                                      :if-exists :append)
+                      (with-printv-output-to (logfile)
+                        (mx)))))
+       (t         (bt:with-recursive-lock-held (*printv-lock*)
+                    (mx))))))
 
 (setf (macro-function :ppmx) (macro-function 'ppmx))
 
