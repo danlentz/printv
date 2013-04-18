@@ -392,10 +392,29 @@ they are used in the final (value-returning) position of the
 progn. Further, the special keywords that control these typographic
 features are user-configurable (see CONFIGURABLES, below).
 
+Be aware, however, that although useful, these typographic extensions
+may potentially at odds with the PRINTV philosophy of pure
+transparency. In particular, although the formatting tags are
+"invisible" within the scope of PRINTV and returned values of
+evaluated forms are automatically passed through to be correctly
+returned form PRINTV when these tags appear in the tail position of
+PRINTV's implicit progn, this will not the case if PRINTV is disabled
+(see `disable-printv`) or when the printv is removed.  The safest
+approach is to never use these tags in the tail position -- making
+sure that the final form is the one returning the desired values.  In
+practice I have not found this to be difficult to manage, and,
+practically speaking, I have not come up with a *totally* safe
+alternative means to specify extended formatting.  In my opinion, the
+benefits are worth this small inconvenience; also, one is always free
+to ignore the extended formatting features entirely, or even disable
+them by configuring them to be uninterned symbols, like so:
+
+    (setf *major-separator*      (gensym))
+    (setf *minor-separator*      (gensym))
+    (setf *timestamp-designator* (gensym))    
+
 The following are a few examples which illustrate some PRINTV's that
-use the thin and thick rule features, hearafter referred to as
-"major-separators" and "minor-separators" for consistency with the
-implementation code:
+use the timestamp, thin and thick rule features:
 
     (printv :hr "Section 1." :hr)
 
