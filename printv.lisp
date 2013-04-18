@@ -9,7 +9,7 @@
 
 (defvar *default-printv-output*     *trace-output*)
 (defvar *printv-output*             *default-printv-output*)
-(defvar *printv-lock*               (bt:make-recursive-lock "printv"))
+(defvar *printv-lock*               (make-recursive-lock))
 
 (defparameter *figlet-executable*      "figlet")
 (defparameter *figlet-font*            "standard")
@@ -72,14 +72,14 @@
               (values))))
      (etypecase *printv-output*
        (null      (values)) 
-       (pathname  (bt:with-recursive-lock-held (*printv-lock*)
+       (pathname  (with-recursive-lock-held (*printv-lock*)
                     (with-open-file (logfile *printv-output* 
                                       :direction :output
                                       :if-does-not-exist :create
                                       :if-exists :append)
                       (with-printv-output-to (logfile)
                         (mx)))))
-       (stream    (bt:with-recursive-lock-held (*printv-lock*)
+       (stream    (with-recursive-lock-held (*printv-lock*)
                     (mx))))))
 
 (setf (macro-function :ppmx) (macro-function 'ppmx))
@@ -225,14 +225,14 @@
                 (values-list ,result-sym))))
        (etypecase *printv-output*
          (null      ,(append '(progn) forms))
-         (pathname  (bt:with-recursive-lock-held (*printv-lock*)
+         (pathname  (with-recursive-lock-held (*printv-lock*)
                       (with-open-file (logfile *printv-output* 
                                         :direction :output
                                         :if-does-not-exist :create
                                         :if-exists :append)
                         (with-printv-output-to (logfile)
                           (exp-1)))))
-         (stream    (bt:with-recursive-lock-held (*printv-lock*)
+         (stream    (with-recursive-lock-held (*printv-lock*)
                       (exp-1)))))))
 
 (defmacro printv (&rest forms)

@@ -1,7 +1,7 @@
 printv
 ======
 
->  PRINTV is a 'batteries-included' tracing and debug-logging macro based
+> PRINTV is a 'batteries-included' tracing and debug-logging macro based
 > on __"The Handy PRINTV"__ by *Dan Corkill, Copyright (c) 2006-2010*,
 > and open-source licensed under the terms of Apache License version 2.
 
@@ -124,14 +124,15 @@ and returns multiple-values:
 
 #### Basic Form Evaluation and Tracing 
 
-The fundamental purpose of PRINTV is to log a trace of the forms with
-its scope and the result of their evaluation to a specified output
-stream.  This allows the user to closely monitor the execution of
-program code in order to better understand its operation and to
-quickly identify problems that may occur due to undexpected results.
+The fundamental purpose of PRINTV is to log a trace of the forms
+within its lexical scope and to log the result of their evaluation to
+a specified output destination.  This allows the user to closely monitor
+the execution of program code, to better understand its
+operation, and to quickly identify problems that may occur due to
+undexpected results.
 
-A simple example that illustrates this basic functionality is shown
-below.  Say one wishes to trace the execution of the following
+Here is a simple example that illustrates this basic functionality.
+Say one has written the following code to perform some desired
 calculation:
 
     (defvar *y*) 
@@ -139,10 +140,12 @@ calculation:
     (setf *y* (sqrt *x*))
     (setf *y* (/ 1 *y*))
     
-Evaluation of this block of code results in the value `0.70710677.` To
-understand more clearly (or simply to track), it's operation, one
-might simply enclose the code within PRINTV. The result is the ability
-to see a trace, form by form, of its evaluation:
+Evaluation of this block of code results in the value `0.70710677.`
+To understand more clearly (or simply to track), it's operation, one
+can simply enclose the code within PRINTV. The principlal benefit of
+instrumenting your code with PRINTV derives from the capability to produce
+a trace, form by form as they are evaluated, and possibly to archive this
+detailed record of its execution to persistent storage media.
 
     (:printv
       (defvar *y*) 
@@ -150,8 +153,8 @@ to see a trace, form by form, of its evaluation:
       (setf *y* (sqrt *x*))
       (setf *y* (/ 1 *y*)))
       
-This produces the following text to PRINTV's output stream, but still
-results in the same value:  `0.70710677.`
+This produces the following text to PRINTV's output stream, and still
+results in the same returned value:  `0.70710677.`
 
     ;;;   (DEFVAR *Y*) => *Y*
     ;;;   (DEFPARAMETER *X* 2) => *X*
@@ -322,16 +325,16 @@ And returns multiple-values:
     "no"
     3
 
-Notice that each cond clause evaluated, depicted by a bracketed *[clause -> result]*
-representation, is displayed below the COND form and before the final
-result in the printv output text.  By examining this output, it is
-evident that the successful clause head was `(symbolp :x)` which, of
-course, is true, but that the more specific clause head `(keywordp
-:x)` that, most likely, was the author's intent, was never
-evaluated. This is a common error which can be fixed by reordering
-the two clauses, but one that can be sometimes be elusive 
-in actual code.  With PRINTV, it was immediately obvious what the
-problem was and how to resolve it:
+Notice that each cond clause evaluated, depicted by a bracketed
+*[clause -> result]* representation, is displayed below the COND form
+and before the final result in the printv output text.  By examining
+this output, it is evident that the successful clause head was
+`(symbolp :x)` which, of course, is true, but that the more specific
+clause head `(keywordp :x)` that, most likely, was the author's
+intent, was never evaluated. This is a common error which can be fixed
+by reordering the two clauses, but one that can be sometimes be
+elusive in actual code.  With PRINTV, it was immediately obvious what
+the problem was and how to resolve it:
 
     (printv
       (cond
@@ -358,7 +361,7 @@ And, as was the programmer's intent, now correctly returns:
 
 This type of programmer error does not cause a warning that can be
 reported by the compiler, or flag an error to alert the user at runtime. In
-fact, the original version of the code is entirely *valid*; but it does not
+fact, the original version of the code is entirely *valid*, but it does not
 correctly represent the programmer's intent.  This is just one of many
 situations in which the 'tracing' functionality of PRINTV is
 indespensible for quick identification and resolution of errors in
@@ -465,10 +468,21 @@ Returns:
 
     "Intel(R) Xeon(R) CPU           E5462  @ 2.80GHz"
 
-
-   
+  
 
 #### Enablement and Control of Output
+
+A principle design-goal of this PRINTV library is to provide a number
+of options of the destinations to where the output may be directed,
+and a robust api with which the user may flexibly select one
+within some particular dynamic extent of program
+execution. Under-the-hood, output control is implemeted using two
+special-variables: `*default-printv-output*` and `*printv-output*`
+(see CONFIGURABLES).
+
+
+
+
 
 #### Macro debugging with PPMX
 
