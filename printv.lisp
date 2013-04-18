@@ -58,20 +58,20 @@
   "Pretty prints the macro expansion of FORM."
   `(flet ((mx () 
             (let* ((exp1 (macroexpand-1 ',form))
-                    (exp (macroexpand exp1))
-                    (*print-circle* nil))
+                    (exp (macroexpand     exp1))
+                    (*print-circle*        nil))
               (format *printv-output* "~%;;; Form: ~W"  (quote ,form))
-              (cond ((equal exp exp1)
-                      (format *printv-output* "~%;;;~%;;; Macro expansion:~%")
-                      (pprint exp *printv-output*))
-                (t (format *printv-output* "~&;;; First step of expansion:~%")
-                  (pprint exp1 *printv-output*)
-                  (format *printv-output* "~%;;;~%;;; Final expansion:~%")
-                  (pprint exp *printv-output*)))
+              (cond
+                ((equal exp exp1) (format *printv-output* "~%;;;~%;;; Macro expansion:~%")
+                                  (pprint exp *printv-output*))
+                (t                (format *printv-output* "~&;;; First step of expansion:~%")
+                                  (pprint exp1 *printv-output*)
+                                  (format *printv-output* "~%;;;~%;;; Final expansion:~%")
+                                  (pprint exp *printv-output*)))
               (format *printv-output* "~%;;;~%;;; ")
               (values))))
      (etypecase *printv-output*
-       (null      nil) 
+       (null      (values)) 
        (pathname  (bt:with-recursive-lock-held (*printv-lock*)
                     (with-open-file (logfile *printv-output* 
                                       :direction :output
@@ -79,7 +79,7 @@
                                       :if-exists :append)
                       (with-printv-output-to (logfile)
                         (mx)))))
-       (t         (bt:with-recursive-lock-held (*printv-lock*)
+       (stream    (bt:with-recursive-lock-held (*printv-lock*)
                     (mx))))))
 
 (setf (macro-function :ppmx) (macro-function 'ppmx))
@@ -205,14 +205,14 @@
                                               (symbol-name form)))
                         `((form-printer 
                             ,(with-output-to-string (s)                      
-                               (princ "#|" s)
+                               (princ "#||" s)
                                (terpri s)
                                (ignore-errors
                                  (asdf/run-program:run-program
                                    (format nil "~A -f ~A -w ~D ~A" *figlet-executable*
                                      *figlet-font* *print-right-margin* (symbol-name form))
                                    :output s))
-                               (princ "|#" s)))))
+                               (princ "||#" s)))))
                       ;; Evaluated form:
                       ((or (consp form) (and (symbolp form) (not (keywordp form))))
                         `((form-printer ',form)
@@ -232,16 +232,13 @@
                                         :if-exists :append)
                         (with-printv-output-to (logfile)
                           (exp-1)))))
-         (t         (bt:with-recursive-lock-held (*printv-lock*)
+         (stream    (bt:with-recursive-lock-held (*printv-lock*)
                       (exp-1)))))))
-
 
 (defmacro printv (&rest forms)
   (expander forms))
 
 (setf (macro-function :printv) (macro-function 'printv))
-
-;; (printv  ||::|PRINTv| )
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
