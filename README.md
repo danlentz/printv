@@ -88,14 +88,14 @@ To start, here's a quick example that shows a few features in action:
 
 prints the following:
 
-    #|
+    #||
                       _       _                          _               _         
            _ __  _ __(_)_ __ | |___   __      ___  _   _| |_ _ __  _   _| |_       
           | '_ \| '__| | '_ \| __\ \ / /____ / _ \| | | | __| '_ \| | | | __|      
      _ _  | |_) | |  | | | | | |_ \ V /_____| (_) | |_| | |_| |_) | |_| | |_   _ _ 
     (_|_) | .__/|_|  |_|_| |_|\__| \_/       \___/ \__,_|\__| .__/ \__,_|\__| (_|_)
           |_|                                               |_|                    
-    |#
+    ||#
     ;;;
     ;;; ------------------------------------------------------------------------ ;;;
     ;;; .............. Wednesday, April 17, 2013 06:39:03 PM EDT ............... ;;;
@@ -466,10 +466,51 @@ Returns:
     "Intel(R) Xeon(R) CPU           E5462  @ 2.80GHz"
 
 
-#### Macro debugging with PPMX
+   
 
 #### Enablement and Control of Output
 
+#### Macro debugging with PPMX
+
+As one last example, using the magic of PPMX we can finally have a
+look at the internal operation of PRINTV itself -- this is very
+frequently necessary when developing extensions to PRINTV.  We will show
+the macroexpansion of a form used in one of our previous examples:
+
+    (ppmx (printv :hr :ts :hr (machine-version) :hr))
+
+Prints:
+    
+    ;;; Form: (PRINTV :HR :TS :HR (MACHINE-VERSION) :HR)
+    ;;;
+    ;;; Macro expansion:
+
+    (FLET ((EXP-1 ()
+             (LET ((*PRINT-READABLY* NIL) #:G3262)
+               (MINOR-SEPARATOR)
+               (TIMESTAMP)
+               (MINOR-SEPARATOR)
+               (FORM-PRINTER '(MACHINE-VERSION))
+               (VALUES-PRINTER
+                (SETF #:G3262 (FUNCALL # (MULTIPLE-VALUE-LIST (MACHINE-VERSION)))))
+               (MINOR-SEPARATOR)
+               (VALUES-LIST #:G3262))))
+      (ETYPECASE *PRINTV-OUTPUT*
+        (NULL (PROGN :HR :TS :HR (MACHINE-VERSION) :HR))
+        (PATHNAME
+         (BORDEAUX-THREADS:WITH-RECURSIVE-LOCK-HELD (*PRINTV-LOCK*)
+           (WITH-OPEN-FILE
+               (LOGFILE *PRINTV-OUTPUT* :DIRECTION :OUTPUT :IF-DOES-NOT-EXIST
+                :CREATE :IF-EXISTS :APPEND)
+             (WITH-PRINTV-OUTPUT-TO (LOGFILE)
+               (EXP-1)))))
+        (STREAM
+         (BORDEAUX-THREADS:WITH-RECURSIVE-LOCK-HELD (*PRINTV-LOCK*)
+           (EXP-1)))))
+    ;;;
+    ;;;     
+
+    
 #### Configurables
 
 * `*default-printv-output*` [`*trace-output*`]
