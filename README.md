@@ -384,8 +384,8 @@ our options when choosing the manner in which we can implement such
 features.
 
 You may have noticed from the first example shiown in section USAGE
-that the keywords `:hr` and `:ff` were used to insert into the log
-a thin and thick horizontal rule, respectively.  For these kinds of
+that the keywords `:hr` and `:ts` were used to insert into the log
+a thin horizontal rule and timestamp, respectively.  For these kinds of
 simple, self-contained tags, it is reasonable that we can choose a few
 keywords such as these and handle them specially when encountered
 within the implicit progn of a PRINTV. In doing so, we can simply
