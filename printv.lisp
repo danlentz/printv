@@ -172,7 +172,7 @@
                                      clauses))
        (format *printv-output* "~&;;;   =>"))))
 
-(defun expander (forms &optional (values-trans-fn #'identity))
+(defun expander (forms &optional (values-trans-fn 'identity))
   (let ((result-sym (gensym)))
     `(flet ((exp-1 ()
               (let ((*print-readably* nil) ,result-sym)
@@ -186,7 +186,7 @@
                       ((and (consp form) (or (eq (car form) 'let) (eq (car form) 'let*)))
                         `((form-printer (append '(,(car form) ,(cadr form)) ',(cddr form)))
                            (values-printer
-                             (setf ,result-sym (funcall ,values-trans-fn
+                             (setf ,result-sym (funcall ',values-trans-fn
                                                  (multiple-value-list
                                                    ,(case (car form)
                                                       (let `(vlet ,@(rest form)))
@@ -195,7 +195,7 @@
                       ((and (consp form) (eq (car form) 'cond)) 
                         `((form-printer (append '(,(car form)) ',(rest form)))
                            (values-printer
-                             (setf ,result-sym (funcall ,values-trans-fn
+                             (setf ,result-sym (funcall ',values-trans-fn
                                                  (multiple-value-list (vcond ,@(rest form))))))))
                       ;; FIGLET banner:             
                       ((and (keywordp form) (every (lambda (c)
@@ -217,7 +217,7 @@
                       ((or (consp form) (and (symbolp form) (not (keywordp form))))
                         `((form-printer ',form)
                            (values-printer
-                             (setf ,result-sym (funcall ,values-trans-fn
+                             (setf ,result-sym (funcall ',values-trans-fn
                                                  (multiple-value-list ,form))))))
                       ;; Self-evaluating form:
                       (t `((form-printer 
