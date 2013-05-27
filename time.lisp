@@ -222,20 +222,3 @@
 
 ;; (format-date-range 2007 8 01 2012 3 14)
 ;; "1 September 2007 - 14 April 2012"
-
-#+sbcl
-(defun run-with-timer (secs repeat function &rest args)
-  "Perform an action after a delay of SECS seconds.
-Repeat the action every REPEAT seconds, if repeat is non-nil.
-SECS and REPEAT may be reals.
-The action is to call FUNCTION with arguments ARGS."
-  (check-type secs (real 0 *))
-  (check-type repeat (or null (real 0 *)))
-  (check-type function (or function symbol))
-  (let ((timer (make-timer
-                :repeat repeat
-                :function function
-                :args args)))
-    (schedule-timer timer secs)
-    (setf *timer-list* (sort-timers (cons timer *timer-list*)))
-    timer))
