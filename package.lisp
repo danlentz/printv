@@ -3,7 +3,7 @@
 
 
 (defpackage :printv
-  (:use :cl)
+  (:use :cl #+abcl :java)
   (:export
     #:ppmx
     #:printv
