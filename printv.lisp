@@ -7,7 +7,7 @@
 ;; Configurables - Adjust to Individual Taste
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(defvar *default-printv-output*     *trace-output*)
+(defvar *default-printv-output*     (make-synonym-stream '*trace-output*))
 (defvar *printv-output*             *default-printv-output*)
 (defvar *printv-lock*               (make-recursive-lock))
 
